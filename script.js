@@ -1,6 +1,6 @@
 const nameFull = "@ジオルケン";
-const descFull = "AVNs Lover.❤️❤️";
-const newDesc1 = "> guns.lol/_zkn <";
+const descFull = "AVNs Lover.❤️❤️  ";
+const newDesc1 = "> guns.lol/_zkn <  ";
 let nameIndex = 0;
 let descIndex = 0;
 let deleting = false;
