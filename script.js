@@ -1,5 +1,5 @@
 const nameFull = "@ジオルケン";
-const descFull = "Just  random  guy.";
+const descFull = "AVNs Lover.❤️";
 const newDesc1 = "guns.lol/_zkn";
 let nameIndex = 0;
 let descIndex = 0;
