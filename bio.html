@@ -34,6 +34,10 @@
   <meta name="twitter:image" content="https://raw.githubusercontent.com/ZiolKen/bio/main/resource/desc_img.png" />
 </head>
 
+<script>
+  document.querySelectorAll('body link[rel="icon"], body link[rel="apple-touch-icon"]').forEach(el => document.head.appendChild(el))
+</script>
+
 <body>
 <div id="enter-overlay">
   <div id="enter-text">[ c l i c k ]</div>
@@ -41,6 +45,17 @@
   <div id="music-toggle-wrapper">
     <img id="music-toggle" src="resource/music-on.png" alt="Toggle Music" title="Toggle Music" />
   </div>
+  <script>
+        (self.__next_s = self.__next_s || []).push(["https://raw.githubusercontent.com/ZiolKen/bio/main/assets/effects.js", {
+            "id": "_cursor"
+        }])
+  </script>
+  <script>
+        (self.__next_s = self.__next_s || []).push([0, {
+            "children": "\n                        new cursoreffects.fairyDustCursor({\n                        colors: [\"#ffffff\"]\n                        });\n                    ",
+            "id": "_cursorparticles"
+        }])
+  </script>
   <div class="overlay">
     <div class="profile">
       <div class="avatar-wrapper">
@@ -52,13 +67,11 @@
           />
         </div>
       </div>
-
       <div class="text-group">
         <h1><span id="name-display" class="typing"></span></h1>
         <p><span id="desc-display" class="typing"></span></p>
       </div>
     </div>
-
         <div class="links">
       <a href="https://discord.com/invite/X7QrJvx7Sp" class="btn" title="Discord" target="_blank" rel="noopener noreferrer">
         <img src="resource/discord.png" alt="Discord" />
