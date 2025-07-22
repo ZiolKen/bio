@@ -1,0 +1,12 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/.well-known/discord.txt",
+      "headers": [
+        { "key": "Content-Type", "value": "text/plain" }
+      ]
+    }
+  ]
+}
