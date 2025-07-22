@@ -17,6 +17,7 @@
       background-position: center;
       background-attachment: fixed;
       justify-content: center;
+      display: fixed;
       align-items: center;
       overflow-x: hidden;
       overflow-y: auto;
