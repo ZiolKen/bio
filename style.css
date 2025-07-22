@@ -17,7 +17,6 @@
       background-position: center;
       background-attachment: fixed;
       justify-content: center;
-      display: fixed;
       align-items: center;
       overflow-x: hidden;
       overflow-y: auto;
@@ -112,6 +111,7 @@
       padding: 2rem 3rem;
       border-radius: 15px;
       text-align: center;
+      margin: 0 auto;
       max-width: 450px;
       width: 90vw;
       gap: 1.5rem;
