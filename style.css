@@ -16,9 +16,12 @@
       background-repeat: no-repeat;
       background-position: center;
       background-attachment: fixed;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
       justify-content: center;
-      overflow-x: hidden;
-      overflow-y: auto;
+      align-items: center;
+      position: relative;
     }
 
     @font-face {
@@ -116,8 +119,6 @@
       gap: 1.5rem;
       background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(249, 168, 212, 0.3));
       box-shadow: 0 0 15px rgba(168, 85, 247, 0.6), 0 0 30px rgba(249, 168, 212, 0.5);
-      scrollbar-width: thin;
-      overflow-y: auto;
     }
 
     .profile {
