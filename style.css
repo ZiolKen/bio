@@ -122,11 +122,6 @@
       overflow-y: auto;
     }
 
-    iframe {
-      z-index: 0;
-      position: relative;
-    }
-
     .profile {
       display: flex;
       position: relative;
