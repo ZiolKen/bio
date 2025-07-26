@@ -2,7 +2,7 @@ name: Ping Bot
 
 on:
   schedule:
-    - cron: '*/3 * * * *'  # mỗi 5 phút
+    - cron: '*/3 * * * *'
   workflow_dispatch:
 
 jobs:
