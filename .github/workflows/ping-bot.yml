@@ -1,0 +1,13 @@
+name: Ping Bot
+
+on:
+  schedule:
+    - cron: '*/3 * * * *'  # mỗi 5 phút
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Curl to ping bot
+        run: curl https://ziolken.vercel.app/api/ping-bot
