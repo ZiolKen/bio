@@ -141,14 +141,14 @@
       justify-content: center;
       margin-top: -20px;
       margin-left: 5px;
-      padding: 10px 25px;
+      padding: 9px 25px;
       border-radius: 12px;
       font-weight: 600;
       font-size: 1.1rem;
       white-space: nowrap;
       text-decoration: none;
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-      gap: 5px;
+      gap: 1px;
     }
       
     .status-header {
