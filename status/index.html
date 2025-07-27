@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charSet="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta content="ie=edge" http-equiv="X-UA-Compatible" />
+  <link rel="icon" type="image/png" href="https://files.catbox.moe/6a1vvf.png" />
+  <title>ZiolKen | Bot Status</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preload" href="script.js" as="script" />
+  <link rel="preload" href="https://challenges.cloudflare.com/turnstile/v0/api.js" as="script" />
+  <meta name="theme-color" content="#000000" />
+  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css" rel="stylesheet" /> -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-cpp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-java.min.js"></script>
+  <link rel="manifest" href="assets/manifest.json" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://files.catbox.moe/o5lb2g.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="https://files.catbox.moe/o5lb2g.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="https://files.catbox.moe/o5lb2g.png" />
+  <meta name="description" content="@ジオルケン | Discord bot status, current system info & status, real-time update. • @ZiolKen." />
+  <meta name="author" content="@ジオルケン | Bot Status" />
+  <meta property="og:title" content="@ジオルケン | Bot Status" />
+  <meta property="og:description" content="@ジオルケン | Discord bot status, current system info & status, real-time update. • @ZiolKen." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="@ジオルケン | Bot Status" />
+  <meta name="twitter:description" content="@ジオルケン | Discord bot status, current system info & status, real-time update. • @ZiolKen." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header></header>
+  <div class="status-header">
+    <div id="status-banner" class="status-indicator">
+      <div class="spinner" id="spinner"></div>
+    </div>
+    <a href="https://discord.com/oauth2/authorize?client_id=1398238289500307578&scope=bot&permissions=8" 
+      target="_blank" 
+      class="invite-card">
+    <img src="https://static.cdnlogo.com/logos/d/64/discord.png"
+         alt="Discord"
+         class="discord-logo" />
+    Invite Bot
+  </a>
+  </div>
+
+  <div class="card" id="status-card">
+    <div>
+      <div class="label">Host Service</div>
+      <div class="value" id="host">--</div>
+    </div>
+    <div>
+      <div class="label">Ping</div>
+      <div class="value" id="ping">--</div>
+    </div>
+    <div>
+      <div class="label">Uptime</div>
+      <div class="value" id="uptime">--</div>
+    </div>
+    <div>
+      <div class="label">Servers</div>
+      <div class="value" id="guilds">--</div>
+    </div>
+    <div>
+      <div class="label">Users</div>
+      <div class="value" id="users">--</div>
+    </div>
+    <div>
+      <div class="label">Last Update</div>
+      <div class="value" id="updated">--</div>
+    </div>
+  </div>
+
+  <div class="services">
+    <h2>🔧 Services</h2>
+    <div class="service">
+      <span>Discord Gateway</span>
+      <span class="online-dot">● Online</span>
+    </div>
+    <div class="service">
+      <span>Command System</span>
+      <span class="online-dot">● Online</span>
+    </div>
+    <div class="service">
+      <span>API Endpoint</span>
+      <span class="online-dot" id="api-status">● Online</span>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <h2>📈 Ping History</h2>
+    <canvas id="pingChart" height="100"></canvas>
+  </div>
+
+  <div class="tech">
+    <h2>🧠 Technical Info</h2>
+    <div class="service"><span>Bot Version</span><span>1.2.7</span></div>
+    <div class="service"><span>discord.js</span><span>14.13.0</span></div>
+    <div class="service"><span>Node.js</span><span>22.16.0</span></div>
+    <div class="service"><span>Last Boot</span><span id="boot">--</span></div>
+  </div>
+
+  <footer>
+    © 2025 ZiolKen | Bot Status
+  </footer>
+  
+  <script>
+      document.addEventListener("DOMContentLoaded", () => {
+      const pingChart = new Chart(document.getElementById('pingChart'), {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [{
+            label: 'Ping (ms)',
+            data: [],
+            borderColor: '#58a6ff',
+            backgroundColor: 'rgba(88, 166, 255, 0.2)',
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: { display: false },
+            y: { beginAtZero: true }
+          }
+        }
+      });
+
+      async function loadStatus() {
+        const banner = document.getElementById("status-banner");
+        const spinner = document.getElementById("spinner");
+        if (spinner) spinner.style.display = "inline-block";
+
+        try {
+          const res = await fetch("https://discord-bot-us.onrender.com/status");
+          const data = await res.json();
+
+          if (spinner) spinner.style.display = "none";
+          banner.innerHTML = data.status === "online"
+            ? "🟢 Bot Online"
+            : "🔴 Bot Offline";
+          banner.className = `status-indicator ${data.status === "online" ? "online" : "offline"}`;
+
+          document.getElementById("host").textContent = "🟢 Operational";
+          document.getElementById("ping").textContent = `${data.ping} ms`;
+          document.getElementById("uptime").textContent = data.uptime;
+          document.getElementById("guilds").textContent = data.guilds;
+          document.getElementById("users").textContent = data.users;
+          document.getElementById("updated").textContent = new Date(data.updated).toLocaleString();
+          document.getElementById("boot").textContent = new Date(Date.now() - parseUptime(data.uptime)).toLocaleString();
+
+          document.getElementById("api-status").textContent = "● Online";
+          document.getElementById("api-status").className = "online-dot";
+
+          const now = new Date().toLocaleTimeString();
+          if (pingChart.data.labels.length >= 30) {
+            pingChart.data.labels.shift();
+            pingChart.data.datasets[0].data.shift();
+          }
+          pingChart.data.labels.push(now);
+          pingChart.data.datasets[0].data.push(data.ping);
+          pingChart.update();
+        } catch (err) {
+          if (spinner) spinner.style.display = "none";
+          banner.textContent = "🔴 Bot Offline";
+          banner.className = "status-indicator offline";
+          document.getElementById("host").textContent = "🔴 DOWN ⚠️";
+          document.getElementById("api-status").textContent = "● Offline";
+          document.getElementById("api-status").className = "offline-dot";
+          console.error("Failed to fetch status:", err);
+        }
+      }
+
+      function parseUptime(str) {
+        const parts = str.split(" ");
+        let ms = 0;
+        for (const part of parts) {
+          const [val, unit] = part.match(/\d+|\D+/g);
+          if (unit === "h") ms += +val * 3600000;
+          if (unit === "m") ms += +val * 60000;
+          if (unit === "s") ms += +val * 1000;
+        }
+        return ms;
+      }
+
+      loadStatus();
+      setInterval(loadStatus, 1000);
+    });
+  </script>
+  
+  <script>
+  function animateClickCard(el) {
+    el.classList.remove('spin');         
+    void el.offsetWidth;        
+    el.classList.add('spin');
+    setTimeout(() => el.classList.remove('spin'), 600);
+  }
+  </script>
+
+</body>
+
+</html>
