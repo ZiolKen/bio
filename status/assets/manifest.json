@@ -3,12 +3,12 @@
   "short_name": "BStatus",
   "icons": [
     {
-      "src": "ico.png",
+      "src": "status/assets/ico.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "ico.png",
+      "src": "status/assets/ico.png",
       "sizes": "512x512",
       "type": "image/png"
     }
