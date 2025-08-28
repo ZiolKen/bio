@@ -292,7 +292,7 @@
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.8);
       pointer-events: none;
-      mix-blend-mode: difference; /* để nổi bật trên mọi nền */
+      mix-blend-mode: difference;
       transform: translate(-50%, -50%);
       animation: Cpulse 1.2s infinite;
       z-index: 999999;
