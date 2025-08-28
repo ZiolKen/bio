@@ -96,7 +96,7 @@ document.addEventListener("mousemove", (e) => {
 
   document.body.appendChild(snowflake);
 
-  setTimeout(() => snowflake.remove(), 2000);
+  setTimeout(() => snowflake.remove(), 3000);
 });
 
 const style = document.createElement("style");
