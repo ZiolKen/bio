@@ -73,3 +73,38 @@
 
     updateMusicIcon(true);
   });
+
+const pulse = document.createElement("div");
+pulse.classList.add("cursor-pulse");
+document.body.appendChild(pulse);
+
+document.addEventListener("mousemove", (e) => {
+
+  pulse.style.left = e.pageX + "px";
+  pulse.style.top = e.pageY + "px";
+
+  const snowflake = document.createElement("div");
+  snowflake.textContent = "❄"; 
+  snowflake.style.position = "fixed";
+  snowflake.style.left = e.pageX + "px";
+  snowflake.style.top = e.pageY + "px";
+  snowflake.style.fontSize = Math.random() * 10 + 10 + "px";
+  snowflake.style.opacity = 0.8;
+  snowflake.style.pointerEvents = "none";
+  snowflake.style.color = "#fff";
+  snowflake.style.animation = "fall 2s linear forwards";
+
+  document.body.appendChild(snowflake);
+
+  setTimeout(() => snowflake.remove(), 2000);
+});
+
+const style = document.createElement("style");
+style.textContent = `
+@keyframes fall {
+  to {
+    transform: translateY(200px) rotate(360deg);
+    opacity: 0;
+  }
+}`;
+document.head.appendChild(style);
