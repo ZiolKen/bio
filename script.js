@@ -103,7 +103,7 @@ const style = document.createElement("style");
 style.textContent = `
 @keyframes fall {
   to {
-    transform: translateY(200px) rotate(360deg);
+    transform: translateY(300px) rotate(360deg);
     opacity: 0;
   }
 }`;
