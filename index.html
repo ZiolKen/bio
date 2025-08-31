@@ -42,7 +42,7 @@
   <div id="enter-text">[ c l i c k ]</div>
 </div>
   <div id="music-toggle-wrapper">
-    <img id="music-toggle" src="resource/music-on.png" alt="Toggle Music" title="Toggle Music" />
+    <img id="music-toggle" src="assets/music-on.png" alt="Toggle Music" title="Toggle Music" />
   </div>
   <div class="overlay">
     <div class="profile">
@@ -60,7 +60,19 @@
         <p><span id="desc-display" class="typing"></span></p>
       </div>
     </div>
-        <div class="links">
+    <div class="discord-card">
+      <div class="discord-info">
+        <div class="discord-avatar">
+          <img id="discord-avatar" src="assets/loading.gif" alt="Discord Avatar">
+          <span id="discord-status-dot" class="status-dot offline"></span>
+        </div>
+        <div class="discord-text">
+          <h2 id="discord-username">Loading...</h2>
+          <p id="discord-activity">Fetching...</p>
+        </div>
+      </div>
+    </div>
+    <div class="links">
       <a href="https://discord.com/invite/X7QrJvx7Sp" class="btn" title="Discord" target="_blank" rel="noopener noreferrer">
         <img src="resource/discord.png" alt="Discord" />
       </a>
@@ -92,15 +104,11 @@
         <img src="resource/paypal.png" alt="PayPal" />
       </a>
     </div>
-
   <audio
     id="bg-music" src="assets/music-256kbps.mp3" loop preload="auto">
   </audio>
-
-    <footer>
-      <p>© 2025 ZiolKen • ジオルケン</p>
-    </footer>
   </div>
+</div>
 
 <script
   src="script.js">
