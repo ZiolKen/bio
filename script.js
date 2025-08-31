@@ -109,44 +109,72 @@
   }`;
   document.head.appendChild(style);
 
-  async function fetchStatus() {
+  async function fetchDiscordStatus() {
     try {
       const res = await fetch("https://api.lanyard.rest/v1/users/951037699320602674");
       const { data, success } = await res.json();
 
-      if (!success) {
+      if (!success || !data) {
+        document.getElementById("discord-avatar").src = "assets/loading.gif";
+        document.getElementById("discord-username").innerText = "Offline";
         document.getElementById("discord-activity").innerText = "Offline";
+        document.getElementById("discord-status-dot").style.backgroundColor = "#747f8d";
         return;
       }
 
-      const avatarUrl = `https://cdn.discordapp.com/avatars/${data.discord_user.id}/${data.discord_user.avatar}.png?size=128`;
-      document.getElementById("discord-avatar").src = avatarUrl;
+      if (data.discord_user.avatar) {
+        document.getElementById("discord-avatar").src =
+          `https://cdn.discordapp.com/avatars/${data.discord_user.id}/${data.discord_user.avatar}.png?size=128`;
+      }
 
-      let username = data.discord_user.global_name || data.discord_user.username;
+      const username = data.discord_user.global_name || data.discord_user.username;
       document.getElementById("discord-username").innerText = username;
 
+      const statusColorMap = {
+        online: "#43b581",
+        idle: "#faa61a",
+        dnd: "#f04747",
+        offline: "#747f8d"
+      };
+      document.getElementById("discord-status-dot").style.backgroundColor =
+        statusColorMap[data.discord_status] || "#747f8d";
+
       let activityText = "";
-      if (data.activities && data.activities.length > 0) {
-        const custom = data.activities.find(a => a.type === 4);
-        if (custom) {
-          activityText = custom.state;
-        }
+
+      const custom = data.activities.find(a => a.type === 4);
+      if (custom) {
+        activityText = (custom.emoji ? custom.emoji.name + " " : "") + (custom.state || "");
       }
+
+      if (!activityText && data.listening_to_spotify && data.spotify) {
+        activityText = `🎵 ${data.spotify.song} - ${data.spotify.artist}`;
+      }
+
+      if (!activityText && data.activities.length > 0) {
+        const game = data.activities.find(a => a.type === 0);
+        if (game) activityText = `🎮 ${game.name}`;
+      }
+
       if (!activityText) {
-        if (data.listening_to_spotify) {
-          activityText = `🎵 ${data.spotify.song} - ${data.spotify.artist}`;
-        } else {
-          activityText = `${data.discord_status.charAt(0).toUpperCase() + data.discord_status.slice(1)}`;
-        }
+        const statusTextMap = {
+          online: "🟢 Online",
+          idle: "🌙 Idle",
+          dnd: "⛔️ Do Not Disturb",
+          offline: "⚫️ Offline"
+        };
+        activityText = statusTextMap[data.discord_status] || "Unknown";
       }
 
       document.getElementById("discord-activity").innerText = activityText;
 
     } catch (err) {
       console.error(err);
+      document.getElementById("discord-avatar").src = "assets/loading.gif";
+      document.getElementById("discord-username").innerText = "Error";
       document.getElementById("discord-activity").innerText = "Error fetching status";
+      document.getElementById("discord-status-dot").style.backgroundColor = "#747f8d";
     }
   }
 
-  setInterval(fetchStatus, 3000);
-  fetchStatus();
+  fetchDiscordStatus();
+  setInterval(fetchDiscordStatus, 1000);
