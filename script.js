@@ -74,37 +74,79 @@
     updateMusicIcon(true);
   });
 
-const pulse = document.createElement("div");
-pulse.classList.add("cursor-pulse");
-document.body.appendChild(pulse);
+  const pulse = document.createElement("div");
+  pulse.classList.add("cursor-pulse");
+  document.body.appendChild(pulse);
 
-document.addEventListener("mousemove", (e) => {
+  document.addEventListener("mousemove", (e) => {
 
-  pulse.style.left = e.pageX + "px";
-  pulse.style.top = e.pageY + "px";
+    pulse.style.left = e.pageX + "px";
+    pulse.style.top = e.pageY + "px";
 
-  const snowflake = document.createElement("div");
-  snowflake.textContent = "❄"; 
-  snowflake.style.position = "fixed";
-  snowflake.style.left = e.pageX + "px";
-  snowflake.style.top = e.pageY + "px";
-  snowflake.style.fontSize = Math.random() * 10 + 10 + "px";
-  snowflake.style.opacity = 0.8;
-  snowflake.style.pointerEvents = "none";
-  snowflake.style.color = "#fff";
-  snowflake.style.animation = "fall 2s linear forwards";
+    const snowflake = document.createElement("div");
+    snowflake.textContent = "❄"; 
+    snowflake.style.position = "fixed";
+    snowflake.style.left = e.pageX + "px";
+    snowflake.style.top = e.pageY + "px";
+    snowflake.style.fontSize = Math.random() * 10 + 10 + "px";
+    snowflake.style.opacity = 0.8;
+    snowflake.style.pointerEvents = "none";
+    snowflake.style.color = "#fff";
+    snowflake.style.animation = "fall 2s linear forwards";
 
-  document.body.appendChild(snowflake);
+    document.body.appendChild(snowflake);
 
-  setTimeout(() => snowflake.remove(), 3000);
-});
+    setTimeout(() => snowflake.remove(), 3000);
+  });
 
-const style = document.createElement("style");
-style.textContent = `
-@keyframes fall {
-  to {
-    transform: translateY(300px) rotate(360deg);
-    opacity: 0;
+  const style = document.createElement("style");
+  style.textContent = `
+  @keyframes fall {
+    to {
+      transform: translateY(300px) rotate(360deg);
+      opacity: 0;
+    }
+  }`;
+  document.head.appendChild(style);
+
+  async function fetchStatus() {
+    try {
+      const res = await fetch("https://api.lanyard.rest/v1/users/951037699320602674");
+      const { data, success } = await res.json();
+
+      if (!success) {
+        document.getElementById("discord-activity").innerText = "Offline";
+        return;
+      }
+
+      const avatarUrl = `https://cdn.discordapp.com/avatars/${data.discord_user.id}/${data.discord_user.avatar}.png?size=128`;
+      document.getElementById("discord-avatar").src = avatarUrl;
+
+      let username = data.discord_user.global_name || data.discord_user.username;
+      document.getElementById("discord-username").innerText = username;
+
+      let activityText = "";
+      if (data.activities && data.activities.length > 0) {
+        const custom = data.activities.find(a => a.type === 4);
+        if (custom) {
+          activityText = custom.state;
+        }
+      }
+      if (!activityText) {
+        if (data.listening_to_spotify) {
+          activityText = `🎵 ${data.spotify.song} - ${data.spotify.artist}`;
+        } else {
+          activityText = `${data.discord_status.charAt(0).toUpperCase() + data.discord_status.slice(1)}`;
+        }
+      }
+
+      document.getElementById("discord-activity").innerText = activityText;
+
+    } catch (err) {
+      console.error(err);
+      document.getElementById("discord-activity").innerText = "Error fetching status";
+    }
   }
-}`;
-document.head.appendChild(style);
+
+  setInterval(fetchStatus, 3000);
+  fetchStatus();
