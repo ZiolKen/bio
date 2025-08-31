@@ -11,7 +11,7 @@
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: white;
-      background: url('resource/background.PNG') no-repeat center center fixed;
+      background: url('resource/background.jpg') no-repeat center center fixed;
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center;
@@ -51,7 +51,7 @@
       background-color: rgba(0, 0, 0, 0.6);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      z-index: 9999999;
+      z-index: 999999;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -71,7 +71,6 @@
       color: #f9a8d4;
       font-size: 2rem;
       letter-spacing: 0.3rem;
-      text-shadow: 0 0 10px #f9a8d4, 0 0 20px #a855f7;
       cursor: pointer;
       animation: pulse 2s infinite;
       pointer-events: none;
@@ -86,52 +85,55 @@
 
     #music-toggle-wrapper {
       position: fixed;
+      border: 2px solid rgba(255, 255, 255, 0.2);
       top: 1vh;
-      left: 20px;
-      background: rgba(194, 136, 249, 0.3);
-      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(250, 250, 250, 0.2), 0 0 30px rgba(250, 250, 250, 0.1);
+      left: 10px;
+      background: rgba(10, 10, 10, 0.2);
+      border-radius: 20px;
       padding: 6px;
       z-index: 9999;
-      box-shadow: 0 0 10px rgba(168, 85, 247, 0.7);
     }
 
     #music-toggle {
-      width: 30px;
-      height: auto;
+      width: 35px;
+      height: 30px;
       cursor: pointer;
+      box-shadow: 0 0 15px rgba(250, 250, 250, 0.2), 0 0 30px rgba(250, 250, 250, 0.1);
       transition: transform 0.2s ease, filter 0.3s ease;
-      filter: drop-shadow(0 0 6px #f9a8d4) drop-shadow(0 0 10px #a855f7);
     }
 
     #music-toggle:hover {
       transform: scale(1.1);
-      filter: drop-shadow(0 0 10px #f9a8d4) drop-shadow(0 0 14px #a855f7);
     }
+
     .overlay {
       display: flex;
       flex-direction: column;
       align-items: center;
       position: relative;
       padding: 2rem 3rem;
-      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(250, 250, 250, 0.2), 0 0 30px rgba(250, 250, 250, 0.1);
+      z-index: 1;
+      border-radius: 40px;
       text-align: center;
-      margin: 0 auto;
       max-width: 450px;
-      width: 90vw;
-      gap: 1.5rem;
-      background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(249, 168, 212, 0.3));
-      box-shadow: 0 0 15px rgba(168, 85, 247, 0.6), 0 0 30px rgba(249, 168, 212, 0.5);
+      width: 95vw;
+      border: 2px solid rgba(250, 250, 250, 0.2);
+      background-clip: padding-box;
+      gap: 1rem;
+      background: rgba(10, 10, 10, 0.15);
     }
 
     .profile {
       display: flex;
       position: relative;
+      flex-direction: row;
       align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 0.5rem;
-      width: 100%;
       justify-content: flex-start;
+      gap: 5px;
+      margin-bottom: 0.6rem;
+      width: 100%;
     }
 
     .avatar-wrapper {
@@ -139,12 +141,11 @@
     }
 
     .avatar-border {
-      background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(249, 168, 212, 0.3));
-      box-shadow: 0 0 15px rgba(168, 85, 247, 0.6), 0 0 30px rgba(249, 168, 212, 0.5);
-      background: linear-gradient(135deg, #a855f7, #f9a8d4);
       padding: 4px;
+      border: 2px solid rgba(250, 250, 250, 0.2);
       border-radius: 50%;
       display: inline-block;
+      box-shadow: 0 0 15px rgba(250, 250, 250, 0.2), 0 0 30px rgba(250, 250, 250, 0.1);
     }
 
     .avatar {
@@ -152,7 +153,6 @@
       height: 100px;
       border-radius: 50%;
       display: block;
-      background-color: rgba(0, 0, 0, 0.3);
     }
 
     .text-group {
@@ -160,8 +160,9 @@
       position: relative;
       flex-direction: column;
       justify-content: center;
-      gap: 0.4rem;
+      gap: 0.6rem;
       min-height: 70px;
+      transform: translateY(-5px);
       min-width: 190px;
       flex-grow: 1;
       text-align: left;
@@ -170,7 +171,6 @@
     .text-group h1,
     .text-group p {
       font-weight: 400;
-      margin: 0;
       display: inline-block;
       vertical-align: center;
     }
@@ -189,9 +189,9 @@
       font-family: 'EduVICWANTHand', monospace;
       min-height: 50px;
       min-height: 1.8rem;
-      font-size: 1.2rem;
+      font-size: 1rem;
       opacity: 0.85;
-      margin-top: 0.3rem;
+      margin-top: 0.2rem;
       color: #80ef80;
       text-shadow: 0 0 4px #80ef80, 0 0 8px #80ef80;
     }
@@ -208,9 +208,9 @@
     }
 
     .btn img {
-      width: 40px;
-      height: 40px;
       filter: drop-shadow(0 0 6px #f9a8d4) drop-shadow(0 0 10px #a855f7);
+      width: 36px;
+      height: 36px;
       transition: transform 0.2s ease, filter 0.3s ease;
     }
 
@@ -231,38 +231,28 @@
     .links .btn {
       box-shadow: 0 0 15px rgba(168, 85, 247, 0.6), 0 0 30px rgba(249, 168, 212, 0.5);
       display: inline-flex;
-      align-items: center;
-      justify-content: center;
       background: rgba(255, 255, 255, 0.15);
-      width: 50px;
-      height: 50px;
+      width: 40px;
+      border: 2px solid rgba(250, 250, 250, 0.2);
+      height: 40px;
       border-radius: 50%;
       transition: background 0.3s ease, transform 0.2s ease;
       cursor: pointer;
     }
 
     .links .btn img {
-      width: 35px;
-      height: 35px;
       filter: brightness(1);
       transition: filter 0.3s ease;
     }
 
     .links .btn:hover {
       background: rgba(255, 255, 255, 0.35);
-      transform: translateY(-5px);
     }
 
     .links .btn:hover img {
       filter: brightness(1.3);
     }
 
-    footer {
-      box-shadow: 3 4 15px rgba(168, 85, 247, 0.6), 1 2 15px rgba(249, 168, 212, 0.5);
-      margin-top: 0.4rem;
-      font-size: 0.8rem;
-      opacity: 0.6;
-    }
 
     #bmc-wbtn {
       box-shadow: 0 0 15px #bd5fff, 0 0 30px #bd5fff;
@@ -287,8 +277,8 @@
 
     .cursor-pulse {
       position: fixed;
-      width: 12px;
-      height: 12px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.8);
       pointer-events: none;
@@ -320,4 +310,73 @@
           0 0 18px rgba(255,255,255,0.2);
         opacity: 1;
       }
+    }
+
+    .discord-card {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 5px;
+      border-radius: 25px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .discord-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .discord-avatar {
+      position: relative;
+      width: 55px;
+      height: 55px;
+    }
+
+    .discord-avatar img {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+    }
+
+    .status-dot {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      border: 2px solid #1e1e1e;
+    }
+
+    .status-dot.online  { background: #43b581; }
+    .status-dot.idle    { background: #faa61a; }
+    .status-dot.dnd     { background: #f04747; }
+    .status-dot.offline { background: #747f8d; }
+
+    .discord-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: left;
+    }
+
+    .discord-text h2 {
+      font-size: 17px;
+      margin: 0;
+      font-weight: 600;
+      color: #fff;
+      align-items: left;
+    }
+
+    .discord-text p {
+      font-size: 13px;
+      align-items: left;
+      color: rgba(255,255,255,0.7);
     }
