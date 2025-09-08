@@ -25,6 +25,13 @@
     }
 
     @font-face {
+      font-family: 'Chillax';
+      src: url('fonts/chillax.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
       font-family: 'BitcountGridDouble';
       src: url('fonts/bitcountgriddouble.ttf') format('truetype');
       font-weight: normal;
@@ -177,7 +184,7 @@
     }
 
     .text-group h1 {
-      font-family: 'NotoSerifJP', monospace;
+      font-family: 'Chillax', monospace;
       min-height: 40px;
       font-size: 1.8rem;
       background: linear-gradient(90deg, #a855f7, #f9a8d4);
@@ -187,7 +194,7 @@
     }
 
     .text-group p {
-      font-family: 'EduVICWANTHand', monospace;
+      font-family: 'Chillax', monospace;
       min-height: 50px;
       min-height: 1.8rem;
       font-size: 1rem;
