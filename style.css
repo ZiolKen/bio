@@ -128,7 +128,8 @@
       display: flex;
       position: relative;
       flex-direction: row;
-      align-items: center;
+      text-align: left;
+      align-items: flex-start;
       justify-content: flex-start;
       gap: 5px;
       margin-bottom: 0.6rem;
@@ -137,12 +138,16 @@
 
     .avatar-wrapper {
       flex-shrink: 0;
+      margin-left: 20px;
     }
 
     .avatar-border {
       padding: 4px;
       border: 2px solid rgba(250, 250, 250, 0.2);
       border-radius: 50%;
+      margin-left: 5px;
+      text-align: left;
+      align-items: flex-start;
       display: inline-block;
       box-shadow: 0 0 15px rgba(250, 250, 250, 0.2), 0 0 30px rgba(250, 250, 250, 0.1);
     }
