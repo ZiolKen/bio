@@ -27,7 +27,8 @@
     @font-face {
       font-family: 'Chillax';
       src: url('fonts/chillax.ttf') format('truetype');
-      font-weight: normal;
+      font-weight: 500;
+      font-display: swap;
       font-style: normal;
     }
 
@@ -173,7 +174,7 @@
       min-width: 190px;
       margin-left: 5px;
       flex-grow: 1;
-      margin-top: -15px;
+      margin-top: -17px;
       text-align: left;
     }
 
