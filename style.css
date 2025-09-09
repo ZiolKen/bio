@@ -170,8 +170,9 @@
       justify-content: center;
       gap: 0.6rem;
       min-height: 70px;
-      transform: translateY(-5px);
+      transform: translateY(-1px);
       min-width: 190px;
+      margin-left: 5px;
       flex-grow: 1;
       text-align: left;
     }
