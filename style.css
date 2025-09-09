@@ -27,7 +27,7 @@
     @font-face {
       font-family: 'Chillax';
       src: url('fonts/chillax.ttf') format('truetype');
-      font-weight: 500;
+      font-weight: normal;
       font-display: swap;
       font-style: normal;
     }
@@ -174,13 +174,12 @@
       min-width: 190px;
       margin-left: 5px;
       flex-grow: 1;
-      margin-top: -17px;
+      margin-top: -18px;
       text-align: left;
     }
 
     .text-group h1,
     .text-group p {
-      font-weight: 400;
       display: inline-block;
       vertical-align: center;
     }
@@ -189,6 +188,7 @@
       font-family: 'Chillax', monospace;
       min-height: 40px;
       font-size: 1.8rem;
+      font-weight: 500;
       background: linear-gradient(90deg, #a855f7, #f9a8d4);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -199,6 +199,7 @@
       font-family: 'Chillax', monospace;
       min-height: 50px;
       min-height: 1.8rem;
+      font-weight: 400;
       font-size: 1.1rem;
       opacity: 0.85;
       margin-top: 0.1rem;
