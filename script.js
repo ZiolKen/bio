@@ -1,6 +1,5 @@
 // --------------------------------------- © 2025 - ZiolKen • ジオルケン --------------------------------------- //
 
-
   const nameFull = "@ジオルケン";
   const descFull = "AVNs Lover.❤️❤️       ";
   const newDesc1 = "> guns.lol/_zkn <       ";
