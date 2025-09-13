@@ -376,7 +376,7 @@
       border: 2px solid #1e1e1e;
     }
 
-    .status-dot.online  { background: #43b581; }
+    .status-dot.online  { background: #02c46c; }
     .status-dot.idle    { background: #faa61a; }
     .status-dot.dnd     { background: #f04747; }
     .status-dot.offline { background: #747f8d; }
