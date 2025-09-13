@@ -44,9 +44,9 @@
 
   const updateMusicIcon = (isPlaying) => {
     if (isPlaying) {
-      toggle.src = 'assets/music-on.PNG' + new Date().getTime();
+      toggle.src = 'assets/music-on.PNG';
     } else {
-      toggle.src = 'assets/music-off.PNG' + new Date().getTime();
+      toggle.src = 'assets/music-off.PNG';
     }
   };
 
