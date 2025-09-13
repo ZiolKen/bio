@@ -138,8 +138,9 @@
           `https://cdn.discordapp.com/avatars/${data.discord_user.id}/${data.discord_user.avatar}.png?size=128`;
       }
 
-      const username = data.discord_user.global_name || data.discord_user.username;
-      document.getElementById("discord-username").innerText = username;
+      const globalName = data.discord_user.global_name || "";
+      const userTag = "@" + data.discord_user.username;
+      document.getElementById("discord-username").innerText = globalName + " (" + userTag + ")";
 
       const statusColorMap = {
         online: "#02c46c",
