@@ -142,7 +142,7 @@
       document.getElementById("discord-username").innerText = username;
 
       const statusColorMap = {
-        online: "#43b581",
+        online: "#02c46c",
         idle: "#faa61a",
         dnd: "#f04747",
         offline: "#747f8d"
