@@ -188,6 +188,6 @@
   }
 
   fetchDiscordStatus();
-  setInterval(fetchDiscordStatus, 1000);
+  setInterval(fetchDiscordStatus, 5000);
   
 // --------------------------------------- © 2025 - ZiolKen • ジオルケン --------------------------------------- //
