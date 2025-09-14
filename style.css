@@ -131,7 +131,7 @@
       border: 2px solid rgba(250, 250, 250, 0.2);
       background-clip: padding-box;
       gap: 0.5rem;
-      background: rgba(10, 10, 10, 0.15);
+      background: rgba(10, 10, 10, 0.2);
     }
 
 /* ------------- ███████╗██╗░█████╗░██╗░░░░░██╗░░██╗███████╗███╗░░██╗ ------------- */
@@ -335,7 +335,7 @@
 
     .discord-card {
       width: 100%;
-      height: 110%;
+      height: 70px;
       padding: 10px;
       margin-bottom: 10px;
       border-radius: 25px;
