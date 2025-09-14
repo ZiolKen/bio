@@ -79,10 +79,9 @@
   });
   
   document.getElementById("enter-overlay").addEventListener("click", function () {
-
     setTimeout(function () {
       document.querySelector(".overlay").classList.add("show");
-    }, 500);
+    }, 300);
   });
 
 // -------------------------- ███████╗██╗░█████╗░██╗░░░░░██╗░░██╗███████╗███╗░░██╗ -------------------------- //
