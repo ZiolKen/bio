@@ -100,7 +100,7 @@
       box-shadow: 0 0 15px rgba(250, 250, 250, 0.2), 0 0 30px rgba(250, 250, 250, 0.1);
       left: 10px;
       background: rgba(10, 10, 10, 0.2);
-      border-radius: 15px;
+      border-radius: 18px;
       padding: 6px;
       z-index: 9999;
     }
@@ -131,7 +131,6 @@
       opacity: 0;
       transform: scale(0);
       pointer-events: none;
-      transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
       width: 95vw;
       border: 2px solid rgba(250, 250, 250, 0.2);
       background-clip: padding-box;
