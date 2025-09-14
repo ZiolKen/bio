@@ -140,7 +140,7 @@
     }
     
     .overlay.show {
-      animation: popIn 0.7s ease-in-out;
+      animation: popIn 0.6s ease-in-out;
       opacity: 1;
       transform: scale(1);
       pointer-events: auto;
