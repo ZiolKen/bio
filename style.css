@@ -126,6 +126,7 @@
       box-shadow: 0 0 15px rgba(250, 250, 250, 0.2), 0 0 30px rgba(250, 250, 250, 0.1);
       border-radius: 40px;
       text-align: center;
+      backdrop-filter: blur(10px);
       max-width: 450px;
       animation: popIn 0.9s ease-in-out forwards;
       width: 95vw;
@@ -369,13 +370,13 @@
 
     .discord-avatar {
       position: relative;
-      width: 55px;
-      height: 55px;
+      width: 60px;
+      height: 60px;
     }
 
     .discord-avatar img {
-      width: 55px;
-      height: 55px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
       border: 2px solid rgba(255,255,255,0.2);
     }
