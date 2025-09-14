@@ -124,7 +124,7 @@
       position: relative;
       padding: 2rem 2rem;
       box-shadow: 0 0 15px rgba(250, 250, 250, 0.2), 0 0 30px rgba(250, 250, 250, 0.1);
-      border-radius: 40px;
+      border-radius: 45px;
       text-align: center;
       backdrop-filter: blur(10px);
       max-width: 450px;
@@ -140,7 +140,7 @@
     }
     
     .overlay.show {
-      animation: popIn 0.5s ease-in-out forwards;
+      animation: popIn 0.7s ease-in-out;
       opacity: 1;
       transform: scale(1);
       pointer-events: auto;
