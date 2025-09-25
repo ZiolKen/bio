@@ -6,8 +6,8 @@
 
 Feature-rich, customize and modern link-in-bio pages.
 
-https://ziolken.vercel.app/
-https://ziolken.github.io/bio
-https://ziolken.netlify.app/
+- https://ziolken.vercel.app/
+- https://ziolken.github.io/bio
+- https://ziolken.netlify.app/
 
 @ジオルケン | @ZiolKen
