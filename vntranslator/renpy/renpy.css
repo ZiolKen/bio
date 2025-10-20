@@ -1,0 +1,94 @@
+    .log-success { color: #22c55e; }
+    .log-error { color: #ef4444; }
+    .log-info { color: #38bdf8; }
+    .log-warning { color: #f59e0b; }
+    .spinner {
+      border: 4px solid rgba(255,255,255,0.2);
+      border-left-color: #3b82f6;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #controlBtns {
+      position: sticky;
+      bottom: 0;
+      z-index: 20;
+      background: rgba(31,41,55,0.92);
+      padding-top: 0.4rem;
+      padding-bottom: 0.2rem;
+      margin-top: -0.7rem;
+      border-radius: 0 0 0.75rem 0.75rem;
+      backdrop-filter: blur(4px);
+    }
+    .main-title-animate {
+      opacity: 0;
+      transform: translateY(1.7rem);
+      transition: all 1.1s cubic-bezier(.45,1.13,.67,1.02);
+    }
+    .main-title-animate.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 50;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+    }
+    .modal-content {
+      background-color: #1e293b;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #334155;
+      width: 80%;
+      max-width: 500px;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    .close-modal {
+      color: #94a3b8;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close-modal:hover {
+      color: #f8fafc;
+    }
+ 
+  .file-error {
+    color: #ef4444;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    display: none;
+  }
+
+  .back-btn {
+      display: inline-block;
+      width: auto;
+      padding: 12px 24px;
+      border: 1px solid var(--neon-cyan);
+      border-radius: 9999px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: 'Turret Road', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      background: transparent;
+      color: var(--neon-cyan);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+  }
+
+  .back-btn:hover {
+      background-color: var(--neon-cyan);
+      color: var(--bg-primary);
+      box-shadow: 0 0 20px var(--neon-cyan);
+  }

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <title>How to Extract .rpy Files from Ren'Py Games (PC & Android)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+ 
+        body {
+            min-height: 100vh;
+        }
+ 
+        .maincard {
+            background: #212837ec;
+            box-shadow: 0 6px 32px 0 #0005;
+            border-radius: 1.25rem;
+            margin: 0.7rem 0.5rem;
+            max-width: 520px;
+            width: 100%;
+        }
+ 
+        .scroll-body {
+            max-height: 84vh;
+            overflow-y: auto;
+            padding-bottom: 2.2rem !important;
+            scroll-behavior: smooth;
+        }
+ 
+        @media (max-width: 600px) {
+            .maincard {
+                margin: 0.5rem 0.1rem;
+            }
+ 
+            .scroll-body {
+                max-height: 93vh;
+            }
+        }
+ 
+        .hint {
+            background: #2563eb22;
+            color: #bae6fd;
+            border-left: 3px solid #2563eb;
+            padding: 0.55rem 0.9rem;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.98rem;
+        }
+    </style>
+</head>
+ 
+<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center justify-start pt-2">
+    <div class="maincard flex flex-col w-full border border-gray-700">
+        <div class="px-5 pt-6 pb-3 text-center bg-gradient-to-tr from-slate-900 via-blue-900 to-sky-500 rounded-t-2xl shadow">
+            <h1 class="text-2xl font-bold mb-1 text-white drop-shadow">📖 Extracting <span class="text-sky-300">.rpy</span> Scripts from Ren'Py Games</h1>
+            <p class="text-base text-blue-100">For both PC & Android – Updated for 2025</p>
+        </div>
+        <div class="scroll-body px-5 pt-5 pb-3 md:px-8">
+ 
+            <div class="hint mb-3">
+                <b>Why do this?</b><br>
+                Some Ren'Py games store their story/dialog in plain <span class="font-mono bg-gray-700 px-1 rounded">.rpy</span> files, while others use <span class="font-mono bg-gray-700 px-1 rounded">.rpyc</span> (encrypted/compiled) or <span class="font-mono bg-gray-700 px-1 rounded">.rpa</span> (archives). To translate, mod, or back up the story, you need to get the <b>.rpy</b> source first!
+            </div>
+ 
+            <h2 class="text-lg font-bold text-blue-400 mt-2 mb-1">🖥️ On PC (Windows, Mac, Linux):</h2>
+            <ol class="list-decimal pl-6 space-y-2 text-gray-100 mb-5">
+                <li>
+                    <b>Find the game folder:</b>
+                    Usually in <span class="font-mono bg-gray-700 px-2 rounded">GameFolder/game/</span> or wherever you installed/extracted it.
+                </li>
+                <li>
+                    <b>Check for <span class="font-mono bg-gray-700 px-1 rounded">.rpy</span> files.</b>
+                    If you see files like <span class="font-mono bg-gray-700 px-1 rounded">script.rpy</span>, <span class="font-mono bg-gray-700 px-1 rounded">dialogue.rpy</span>, etc — that's the source! You can upload them directly to a translator.
+                </li>
+                <li>
+                    <b>If only <span class="font-mono bg-gray-700 px-1 rounded">.rpa</span> or <span class="font-mono bg-gray-700 px-1 rounded">.rpyc</span> exist:</b>
+                    <ul class="list-disc pl-5 mt-1 text-gray-300 text-sm">
+                        <li>
+                            <b>To extract .rpa files (archives):</b><br>
+                            Use the <a href="https://grviewer.com/tab/rpa-extractor-online" target="_blank" rel="noopener" class="text-blue-300 underline">RPA Extractor Online</a>.
+                            <span class="text-gray-400 block">Just upload your <b>.rpa</b> file, click extract, then download the results.<br>If you see <b>.rpy</b> files after extraction — you're done!</span>
+                        </li>
+                        <li class="mt-2">
+                            <b>If you get .rpyc (compiled/encrypted scripts):</b><br>
+                            Use the <a href="https://grviewer.com/tab/rpyc-decompiler-online" target="_blank" rel="noopener" class="text-blue-300 underline">RPYC Decompiler Online</a>.<br>
+                            <span class="text-gray-400">Upload your <b>.rpyc</b> file, click decompile, then download the resulting <b>.rpy</b> script.
+                                This works for most standard Ren'Py games.</span>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    Once you have a <b>.rpy</b> script file, you can open it with Notepad, Notepad++, VSCode, or upload it to this translator tool.
+                </li>
+            </ol>
+ 
+            <h2 class="text-lg font-bold text-green-400 mt-4 mb-1">📱 On Android (Phone or Tablet):</h2>
+            <ol class="list-decimal pl-6 space-y-2 text-gray-100 mb-5">
+                <li>Run your Ren'Py game at least once to make sure its data folder exists.</li>
+                <li>
+                    Use a file manager (like <b>ZArchiver</b> or <b>Solid Explorer</b>) and go to:<br>
+                    <span class="font-mono bg-gray-700 px-2 rounded">/storage/emulated/0/Android/data/[package.name.of.game]/files/game/</span>
+                </li>
+                <li>
+                    <b>If you see .rpy files:</b>
+                    Copy them to a safe location, and upload for translation or editing.
+                </li>
+                <li>
+                    <b>If you see .rpa or .rpyc only:</b>
+                    <ul class="list-disc pl-5 mt-1 text-gray-300 text-sm">
+                        <li>
+                            <b>Extract .rpa:</b>
+                            Upload your .rpa file to <a href="https://grviewer.com/tab/rpa-extractor-online" target="_blank" rel="noopener" class="text-blue-300 underline">RPA Extractor Online</a> (works from Android browser).
+                        </li>
+                        <li>
+                            <b>Decompile .rpyc:</b>
+                            Upload your .rpyc file to <a href="https://grviewer.com/tab/rpyc-decompiler-online" target="_blank" rel="noopener" class="text-blue-300 underline">RPYC Decompiler Online</a>.
+                        </li>
+                        <li>
+                            <span class="text-yellow-200">If your phone can't upload big files, move them to PC first.</span>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    After you get your <b>.rpy</b> script, you can translate, mod, or re-pack it as you wish.
+                </li>
+            </ol>
+ 
+            <h2 class="text-lg font-bold text-yellow-400 mt-4 mb-1">🔒 Tips, Warnings, and Troubleshooting</h2>
+            <ul class="list-disc pl-6 text-gray-200 text-base mb-4">
+                <li>Not all games can be extracted: some developers use custom encryption/protection.</li>
+                <li>For advanced guides and more Ren’Py tools, see <a href="https://lemmasoft.renai.us/forums/" target="_blank" rel="noopener" class="text-blue-300 underline">Lemmasoft Forums</a> or Discord communities.</li>
+                <li>Always back up original files before modifying.</li>
+                <li>These methods are for legitimate modding, translation, or backup purposes only. Respect developers’ copyrights!</li>
+            </ul>
+ 
+            <div class="hint">
+                <b>Video Tutorials:</b><br>
+                • <a href="https://www.youtube.com/results?search_query=extract+rpa+renpy" target="_blank" rel="noopener" class="text-blue-300 underline">Extract .rpa Ren'Py</a><br>
+                • <a href="https://www.youtube.com/results?search_query=decompile+rpyc+renpy" target="_blank" rel="noopener" class="text-blue-300 underline">Decompile .rpyc Ren'Py</a>
+            </div>
+ 
+            <div class="text-center mt-8 mb-2">
+                <a href="index.html" class="inline-block bg-blue-600 text-white px-5 py-2 rounded-full shadow hover:bg-blue-700 transition">⬅️ Back to Translator</a>
+            </div>
+        </div>
+    </div>
+</body>
+ 
+</html>

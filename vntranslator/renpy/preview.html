@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Preview & Edit Translated Dialog (Ren'Py)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        .spinner {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+ 
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+</head>
+ 
+<body class="bg-gray-900 min-h-screen text-gray-100">
+    <div class="max-w-2xl mx-auto px-2 py-6 space-y-6">
+        <h1 class="text-xl font-bold text-center mb-2">🔎 Preview & Edit Translated Dialog</h1>
+        <div id="model-badge" class="text-center"></div>
+        <div id="list" class="space-y-4"></div>
+        <button onclick="downloadFile()" class="mt-6 w-full bg-green-600 hover:bg-green-700 py-3 rounded-xl font-semibold shadow-lg transition">⬇️ Download Final .rpy</button>
+        <div id="watermark-place" class="flex justify-center mt-6"></div>
+￼      <div class="text-center mt-8 mb-2">
+                <a href="index.html" class="inline-block bg-blue-600 text-white px-5 py-2 rounded-full shadow hover:bg-blue-700 transition">⬅️ Back to Translator</a>
+      </div>
+    </div>
+
+    <script>
+￼      src="preview.js">
+    </script>
+
+</body>
+ 
+</html>
