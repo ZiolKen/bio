@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPG Maker JSON Files Location</title>
+    <style>
+        :root {
+            --bg: #1a1a1a;
+            --text: #e0e0e0;
+            --primary: #6b9bdc;
+            --accent: #2ecc71;
+            --card: #2d2d2d;
+            --border: #444;
+        }
+ 
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+ 
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+        }
+ 
+        .section {
+            background: var(--card);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+ 
+        .folder-structure {
+            background: #252525;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            line-height: 1.8;
+            overflow-x: auto;
+        }
+ 
+        .file-list {
+            padding-left: 20px;
+        }
+ 
+        .file-list li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+        }
+ 
+        .file-list li:before {
+            content: "•";
+            color: var(--accent);
+            position: absolute;
+            left: 10px;
+            font-size: 1.2em;
+        }
+ 
+        .file-path {
+            color: var(--accent);
+            font-family: monospace;
+            background: #252525;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+ 
+        .note {
+            font-style: italic;
+            color: #aaa;
+            margin-top: 15px;
+        }
+ 
+        .warning {
+            color: #ffa726;
+            font-weight: bold;
+        }
+ 
+        .tutorial-btn {
+            display: block;
+            background-color: #FF0000;
+            color: white;
+            text-align: center;
+            padding: 12px 20px;
+            margin: 30px auto;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            width: fit-content;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+ 
+        .tutorial-btn:hover {
+            background-color: #CC0000;
+        }
+ 
+        .tutorial-btn i {
+            margin-right: 8px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+ 
+<body>
+    <h1>RPG Maker JSON Files Location</h1>
+ 
+    <!-- Tutorial YouTube -->
+    <a href="https://youtube.com/shorts/EPuSdqxWPy4?si=ZdtJCd2jmJ3XErjw" class="tutorial-btn" target="_blank">
+        <i class="fab fa-youtube"></i> Video Tutorial
+    </a>
+ 
+    <div class="section">
+        <h2>Folder Structure</h2>
+        <p>All game text is stored in JSON files located at:</p>
+        <div class="folder-structure">
+            www/<br>
+            ├── data/<br>
+            │ ├── Actors.json<br>
+            │ ├── Armors.json<br>
+            │ ├── CommonEvents.json<br>
+            │ ├── Items.json<br>
+            │ ├── Map001.json<br>
+            │ └── ...other files<br>
+            └── js/
+        </div>
+    </div>
+ 
+    <div class="section">
+        <h2>Key Files for Translation</h2>
+        <ul class="file-list">
+            <li><span class="file-path">MapXXX.json</span> - Dialogues and event texts</li>
+            <li><span class="file-path">CommonEvents.json</span> - Shared event texts</li>
+            <li><span class="file-path">Items.json</span> - Item names and descriptions</li>
+            <li><span class="file-path">Weapons.json</span> - Weapon descriptions</li>
+            <li><span class="file-path">Armors.json</span> - Armor descriptions</li>
+            <li><span class="file-path">System.json</span> - Menu and system messages</li>
+        </ul>
+        <p class="note">Note: These files are normally not encrypted in RPG Maker MV/MZ.</p>
+        <p class="warning">Important: Not all JSON files contain dialogue text. If you don't find any dialogue in a particular JSON file, try checking other JSON files in the data folder. If none of the files appear to contain dialogue text, please report this issue to the tool developer.</p>
+    </div>
+</body>
+ 
+</html>
