@@ -100,11 +100,10 @@
       box-shadow: 0 0 15px rgba(250, 250, 250, 0.2), 0 0 30px rgba(250, 250, 250, 0.1);
       left: 10px;
       border-radius: 16px;
-      padding: 6px;
+      padding: 5px;
       z-index: 9999;
-      position: relative;
+      position: fixed;
       background: linear-gradient(135deg, #2c0735, #1a0420);
-      padding: 20px;
     }
     
     #music-toggle-wrapper:hover {
@@ -136,6 +135,7 @@
       width: 35px;
       height: auto;
       cursor: pointer;
+      background: linear-gradient(135deg, #2c0735, #1a0420);
       box-shadow: 0 0 15px rgba(250, 250, 250, 0.2), 0 0 30px rgba(250, 250, 250, 0.1);
       transition: transform 0.2s ease, filter 0.3s ease;
     }
