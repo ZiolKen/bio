@@ -99,7 +99,8 @@
       top: 1vh;
       box-shadow: 0 0 15px rgba(250, 250, 250, 0.2), 0 0 30px rgba(250, 250, 250, 0.1);
       left: 10px;
-      border-radius: 14px;
+      border-radius: 16px;
+      transition: all 0.3s ease-in-out;
       padding: 10px;
       z-index: 9999;
       position: fixed;
@@ -133,6 +134,7 @@
     #music-toggle {
       width: 35px;
       height: auto;
+      transition: all 0.3s ease-in-out;
       cursor: pointer;
       background: transparent;
       transition: transform 0.2s ease, filter 0.3s ease;
@@ -241,6 +243,7 @@
       padding: 4px;
       border: 2px solid rgba(250, 250, 250, 0.2);
       border-radius: 50%;
+      transition: all 0.3s ease-in-out;
       text-align: left;
       align-items: flex-start;
       display: inline-block;
@@ -418,6 +421,7 @@
       width: 100%;
       height: 85px;
       padding: 10px;
+      transition: all 0.3s ease-in-out;
       margin-bottom: 10px;
       border-radius: 25px;
       background: rgba(255, 255, 255, 0.05);
