@@ -99,8 +99,8 @@
       top: 1vh;
       box-shadow: 0 0 15px rgba(250, 250, 250, 0.2), 0 0 30px rgba(250, 250, 250, 0.1);
       left: 10px;
-      border-radius: 16px;
-      padding: 5px;
+      border-radius: 12px;
+      padding: 6px;
       z-index: 9999;
       position: fixed;
       background: linear-gradient(135deg, #2c0735, #1a0420);
