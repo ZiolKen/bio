@@ -102,11 +102,11 @@
       padding: 10px;
       z-index: 9999;
       position: fixed;
-      background: linear-gradient(135deg, #2c0735, #1a0420);
+      background: transparent;
     }
     
     #music-toggle-wrapper:hover {
-      background: linear-gradient(135deg, #2c0735, #1a0420);
+      background: transparent;
       border-color: rgba(168, 85, 247, 0.3);
       box-shadow: 0 12px 40px 0 rgba(168, 85, 247, 0.25);
     }
@@ -120,7 +120,7 @@
       bottom: 0;
       border-radius: 1rem;
       padding: 2px;
-      background: linear-gradient(135deg, #a855f7, #ec4899, #10b981);
+      background: transparent;
       -webkit-mask:
         linear-gradient(#fff 0 0) content-box,
         linear-gradient(#fff 0 0);
@@ -170,13 +170,18 @@
       -webkit-backdrop-filter: blur(10px);
       transition: all 0.3s ease-in-out;
       background: rgba(250, 250, 250, 0.05);
-      border: 1px solid rgba(250, 250, 250, 0.5);
+      border: 1px solid rgba(250, 250, 250, 0.2);
       box-shadow: 0 8px 32px 0 rgba(168, 85, 247, 0.15);
     }
     
-    .avatar-border:hover,
-    .discord-card:hover,
     .overlay:hover {
+      transform: scale(1.1);
+      border-color: rgba(250, 250, 250, 0.3);
+      box-shadow: 0 12px 40px 0 rgba(168, 85, 247, 0.25);
+    }
+    
+    .avatar-border:hover,
+    .discord-card:hover {
       background: rgba(168, 85, 247, 0.08);
       border-color: rgba(168, 85, 247, 0.3);
       box-shadow: 0 12px 40px 0 rgba(168, 85, 247, 0.25);
