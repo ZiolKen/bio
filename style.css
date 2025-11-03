@@ -14,7 +14,7 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: white;
       background: #0000FF;
-      background: linear-gradient(135deg, rgba(0, 0, 255, 1) 0%, rgba(0, 0, 154, 1) 15%, rgba(0, 0, 56, 1) 40%, rgba(102, 0, 136, 1) 60%, rgba(182, 0, 198, 1) 75%, rgba(255, 0, 255, 1) 95%);
+      background: linear-gradient(135deg, rgba(0, 0, 255, 1) 0%, rgba(0, 0, 173, 1) 10%, rgba(0, 0, 56, 1) 25%, rgba(0, 0, 0, 1) 45%, rgba(102, 0, 136, 1) 70%, rgba(171, 0, 189, 1) 85%, rgba(204, 0, 204, 1) 100%);
       /* background: url('assets/background.jpg') no-repeat center center fixed; */
       background-size: cover;
       background-repeat: no-repeat;
