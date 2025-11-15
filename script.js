@@ -262,9 +262,11 @@
   fetchDiscordStatus();
   setInterval(fetchDiscordStatus, 5000);
 
-  window.addEventListener("DOMContentLoaded", () => {
-    const bgm = document.getElementById("bg-music");
-    bgm.volume = 0.5;
+window.addEventListener("DOMContentLoaded", () => {
+  const bgm = document.getElementById("bg-music");
+  bgm.addEventListener("play", () => {
+    bgm.volume = 0.2;
   });
-  
+});
+
 // --------------------------------------- © 2025 - ZiolKen • ジオルケン --------------------------------------- //
