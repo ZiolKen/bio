@@ -94,40 +94,67 @@
     }
 
     #music-toggle-wrapper {
-      border: 2px solid rgba(250, 250, 250, 0.2);
-      top: 1vh;
-      box-shadow: 0 12px 40px 0 rgba(168, 85, 247, 0.25);
-      left: 10px;
-      border-radius: 16px;
-      transition: all 0.3s ease-in-out;
-      padding: 10px;
-      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 15px;
       position: fixed;
-      background: transparent;
+      top: 15px;
+      left: 15px;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(250, 250, 250, 0.05);
+      border: 2px solid rgba(250, 250, 250, 0.2);
+      box-shadow: 0 8px 32px rgba(168,85,247,0.15);
+      cursor: pointer;
+      overflow: hidden;
+      width: 64px;
+      height: 64px;
+      transition: width 0.4s ease, box-shadow 0.3s ease;
+      z-index: 999;
     }
-    
+
     #music-toggle-wrapper:hover {
-      background: transparent;
-      box-shadow: 0 0 15px rgba(250, 250, 250, 0.2), 0 0 30px rgba(250, 250, 250, 0.1);
-      border-color: rgba(168, 85, 247, 0.3);
+      width: 200px;   
+      box-shadow: 0 8px 32px rgba(168,85,247,0.25);
     }
-    
-    #music-toggle-wrapper::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      border-radius: 1rem;
-      padding: 2px;
-      background: transparent;
-      -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
+
+    #music-volume-slider {
+      -webkit-appearance: none;
+      width: 120px;
+      height: 6px;
+      background: rgba(188,122,191,0.4);
+      border-radius: 3px;
+      outline: none;
+      opacity: 0;
       pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      transform: translateX(-20px); 
+    }
+
+    #music-toggle-wrapper:hover #music-volume-slider {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateX(0);
+    }
+
+    #music-volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      background: rgba(188,122,191,1);
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    #music-volume-slider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      background: rgba(188,122,191,1);
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+      cursor: pointer;
     }
 
     #music-toggle {
