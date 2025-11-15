@@ -38,44 +38,61 @@
   }
   updateTyping();
 
-  const music = document.getElementById('bg-music');
-  const toggle = document.getElementById('music-toggle');
-  const overlay = document.getElementById('enter-overlay');
+  const overlayClick = document.getElementById("enter-overlay");
+  const music = document.getElementById("bg-music");
+  const toggle = document.getElementById("music-toggle");
+  const volumeSlider = document.getElementById("music-volume-slider");
 
-  const updateMusicIcon = (isPlaying) => {
-    if (isPlaying) {
-      toggle.src = 'assets/music-on.PNG';
-    } else {
-      toggle.src = 'assets/music-off.PNG';
-    }
-  };
+  let lastVolume = volumeSlider.value / 100;
+  music.volume = lastVolume;
 
-  toggle.addEventListener('click', () => {
-    if (music.paused) {
-      music.muted = false;
-      music.play().catch(e => {
-        console.log("Autoplay blocked:", e);
-      });
-      updateMusicIcon(true);
-    } else {
-      music.pause();
-      updateMusicIcon(false);
-    }
+  function updateIcon() {
+      if (music.paused || music.volume === 0 || music.muted) {
+          toggle.src = "assets/music-off.PNG";
+      } else {
+          toggle.src = "assets/music-on.PNG";
+      }
+  }
+
+  toggle.addEventListener("click", () => {
+      if (music.muted || music.volume === 0) {
+        music.muted = false;
+        music.volume = lastVolume || 0.5;
+        volumeSlider.value = music.volume * 100; 
+        music.play().catch(()=>{});
+      } else {
+          music.muted = true;
+          lastVolume = music.volume; 
+          volumeSlider.value = 0; 
+          music.volume = 0;
+      }
+      updateIcon();
   });
 
-  overlay.addEventListener('click', () => {
-    overlay.style.opacity = '0';
-    setTimeout(() => {
-      overlay.style.display = 'none';
-      overlay.classList.add('hidden');
-    }, 600);
+  overlayClick.addEventListener("click", (e) => {
+      e.stopPropagation();
+      overlayClick.style.opacity = "0";
 
-    music.muted = false;
-    music.play().catch(e => {
-      console.log("Autoplay blocked:", e);
-    });
+      if (music.paused) {
+          music.muted = false;
+          music.play().catch(() => {});
+      }
 
-    updateMusicIcon(true);
+      updateIcon();
+
+      setTimeout(() => {
+          overlayClick.style.display = "none";
+          overlayClick.classList.add("hidden");
+      }, 600);
+  });
+
+  volumeSlider.addEventListener("input", (e) => {
+      e.stopPropagation();
+      const v = volumeSlider.value / 100;
+      music.volume = v;
+      music.muted = v === 0; 
+      lastVolume = v > 0 ? v : lastVolume;
+      updateIcon();
   });
   
   document.getElementById("enter-overlay").addEventListener("click", function () {
