@@ -264,7 +264,7 @@
 
   window.addEventListener("DOMContentLoaded", () => {
     const bgm = document.getElementById("bg-music");
-    bgm.volume = 0.75;
+    bgm.volume = 0.5;
   });
   
 // --------------------------------------- © 2025 - ZiolKen • ジオルケン --------------------------------------- //
