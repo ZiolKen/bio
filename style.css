@@ -123,6 +123,7 @@
       -webkit-appearance: none;
       width: 120px;
       height: 6px;
+      -webkit-backdrop-filter: blur(8px);
       background: rgba(188,122,191,0.4);
       border-radius: 3px;
       outline: none;
