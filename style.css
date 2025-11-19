@@ -99,6 +99,7 @@
       gap: 15px;
       position: fixed;
       top: 15px;
+      -webkit-backdrop-filter: blur(8px);
       left: 15px;
       padding: 12px;
       border-radius: 18px;
