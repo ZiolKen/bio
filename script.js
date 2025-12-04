@@ -293,6 +293,8 @@
   const y = e.clientY - rect.top;
   card.style.setProperty('--x', `${x}px`);
   card.style.setProperty('--y', `${y}px`);
+  card.style.setProperty("--rx", rotateX + "deg");
+  card.style.setProperty("--ry", rotateY + "deg");
   const centerX = rect.width / 2;
   const centerY = rect.height / 2;
   const rotateX = ((y - centerY) / centerY) * 10;
