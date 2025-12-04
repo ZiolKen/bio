@@ -211,7 +211,7 @@
       overflow: hidden;
       background-clip: padding-box;
       gap: 0.5rem;
-      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
       transition: all 0.3s ease-in-out;
       background: rgba(250, 250, 250, 0.05);
       border: 2px solid rgba(250, 250, 250, 0.2);
