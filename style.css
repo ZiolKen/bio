@@ -13,10 +13,12 @@
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: white;
+      /*
       background: url(https://r2.guns.lol/66859255-5918-4218-9bd3-0488061afbe3.mp4);
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center;
+      */
       overflow: hidden;
       height: 100vh;
       display: flex;
@@ -25,7 +27,6 @@
       position: relative;
     }
     
-    /*
     #bg-video {
       position: fixed;
       top: 0;
@@ -33,9 +34,8 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      z-index: -1;
+      z-index: -10000;
     }
-    */
 
     @font-face {
       font-family: 'Chillax';
@@ -204,6 +204,7 @@
       border-radius: 48px;
       text-align: center;
       max-width: 450px;
+      z-index: 9999;
       opacity: 0;
       pointer-events: none;
       --hover-scale: 1;
