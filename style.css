@@ -13,17 +13,27 @@
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: white;
-      background: url('assets/background.jpg') no-repeat center center fixed;
+      /* background: url('assets/background.jpg') no-repeat center center fixed;
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center;
-      background-attachment: fixed;
+      background-attachment: fixed; */
       overflow: hidden;
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       position: relative;
+    }
+    
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
     }
 
     @font-face {
