@@ -286,7 +286,7 @@
     });
   });
 
-  const card = document.querySelector('.card');
+  const card = document.querySelector('.overlay');
   card.addEventListener('mousemove', (e) => {
   const rect = card.getBoundingClientRect();
   const x = e.clientX - rect.left;
