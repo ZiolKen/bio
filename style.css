@@ -13,7 +13,7 @@
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: white;
-      background: url('assets/background.jpg') no-repeat center center fixed;
+      background-image: url(https://r2.guns.lol/66859255-5918-4218-9bd3-0488061afbe3.mp4);
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center;
@@ -205,7 +205,9 @@
       opacity: 0;
       transform: scale(0);
       pointer-events: none;
+      transform-style: preserve-3d;
       width: 95vw;
+      overflow: hidden;
       background-clip: padding-box;
       gap: 0.5rem;
       backdrop-filter: blur(8px);
