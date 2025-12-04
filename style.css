@@ -204,14 +204,14 @@
       border-radius: 48px;
       text-align: center;
       max-width: 450px;
-      z-index: 9999;
+      z-index: 9;
       opacity: 0;
       pointer-events: none;
       --hover-scale: 1;
       transform-style: preserve-3d;
       transform: scale(var(--hover-scale)) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
       width: 95vw;
-      overflow: hidden;
+      overflow: visible;
       background-clip: padding-box;
       gap: 0.5rem;
       -webkit-backdrop-filter: blur(5px);
