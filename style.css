@@ -13,7 +13,7 @@
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: white;
-      background-image: url(https://r2.guns.lol/66859255-5918-4218-9bd3-0488061afbe3.mp4);
+      background: url(https://r2.guns.lol/66859255-5918-4218-9bd3-0488061afbe3.mp4);
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center;
@@ -174,6 +174,8 @@
       width: 35px;
       height: auto;
       transform-style: preserve-3d;
+      backface-visibility: hidden;
+      will-change: transform;
       transition: all 0.3s ease-in-out;
       cursor: pointer;
       background: transparent;
@@ -235,7 +237,9 @@
     .overlay.show {
       animation: popIn 0.6s ease-in-out;
       opacity: 1;
-      transform: scale(1);
+      --rx: 0deg;
+      --ry: 0deg;
+      --hover-scale: 1;
       pointer-events: auto;
     }
     
