@@ -553,4 +553,22 @@
           rgba(168, 85, 247, 0.03) 4px);
     }
     
+    @media (max-width: 768px) {
+      .overlay {
+        transform: none !important;
+        --rx: 0deg;
+        --ry: 0deg;
+        --hover-scale: 1;
+      }
+    }
+    
+    @supports (-webkit-touch-callout: none) {
+      .overlay {
+        transform: none !important;
+        --rx: 0deg;
+        --ry: 0deg;
+        --hover-scale: 1;
+      }
+    }
+    
 /* -------------------------- © 2025 - ZiolKen • ジオルケン -------------------------- */
