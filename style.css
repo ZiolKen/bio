@@ -110,7 +110,8 @@
       gap: 15px;
       position: fixed;
       top: 15px;
-      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
       left: 15px;
       padding: 12px;
       border-radius: 18px;
@@ -214,6 +215,7 @@
       overflow: visible;
       background-clip: padding-box;
       gap: 0.5rem;
+      backdrop-filter: blur(5px);
       -webkit-backdrop-filter: blur(5px);
       transition: all 0.3s ease-in-out;
       background: rgba(250, 250, 250, 0.05);
