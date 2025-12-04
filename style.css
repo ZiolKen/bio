@@ -122,7 +122,7 @@
       width: 64px;
       height: 64px;
       transition: width 0.4s ease, box-shadow 0.3s ease;
-      z-index: 999;
+      z-index: 9999;
     }
 
     #music-toggle-wrapper:hover {
@@ -204,7 +204,7 @@
       border-radius: 48px;
       text-align: center;
       max-width: 450px;
-      z-index: 9;
+      z-index: 999;
       opacity: 0;
       pointer-events: none;
       --hover-scale: 1;
