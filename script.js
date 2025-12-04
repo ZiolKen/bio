@@ -173,6 +173,21 @@
     console.log("Autoplay blocked, trying again after user interaction...");
     document.addEventListener('click', () => bgVideo.play());
   });
+  
+  const overlay = document.getElementById('enter-overlay');
+  
+  overlay.addEventListener('click', () => {
+      overlay.style.opacity = '0';
+      setTimeout(() => {
+          overlay.style.display = 'none';
+          overlay.classList.add('hidden');
+      }, 600);
+  
+      if (bgVideo) {
+          bgVideo.muted = true;
+          bgVideo.play().catch(e => console.log("Video play blocked:", e));
+      }
+  });
 
 // -------------------------- ███████╗██╗░█████╗░██╗░░░░░██╗░░██╗███████╗███╗░░██╗ -------------------------- //
 // -------------------------- ╚════██║██║██╔══██╗██║░░░░░██║░██╔╝██╔════╝████╗░██║ -------------------------- //
