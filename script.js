@@ -279,11 +279,31 @@
   fetchDiscordStatus();
   setInterval(fetchDiscordStatus, 5000);
 
-window.addEventListener("DOMContentLoaded", () => {
-  const bgm = document.getElementById("bg-music");
-  bgm.addEventListener("play", () => {
-    bgm.volume = 0.2;
+  window.addEventListener("DOMContentLoaded", () => {
+    const bgm = document.getElementById("bg-music");
+    bgm.addEventListener("play", () => {
+      bgm.volume = 0.2;
+    });
   });
-});
+
+  const card = document.querySelector('.card');
+  card.addEventListener('mousemove', (e) => {
+  const rect = card.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  card.style.setProperty('--x', `${x}px`);
+  card.style.setProperty('--y', `${y}px`);
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+  const rotateX = ((y - centerY) / centerY) * 10;
+  const rotateY = ((x - centerX) / centerX) * -10;
+  card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  const angle = 135 + rotateX - rotateY;
+  card.style.setProperty('--angle', `${angle}deg`);
+  });
+  card.addEventListener('mouseleave', () => {
+  card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+  card.style.setProperty('--angle', `135deg`);
+  });
 
 // --------------------------------------- © 2025 - ZiolKen • ジオルケン --------------------------------------- //
