@@ -368,8 +368,8 @@
 
     .btn img {
       filter: drop-shadow(0 0 6px #f9a8d4) drop-shadow(0 0 10px #a855f7);
-      width: 45px;
-      height: 45px;
+      width: 40px;
+      height: 40px;
       transition: transform 0.2s ease, filter 0.3s ease;
     }
 
