@@ -310,52 +310,23 @@
   });
 
   const card = document.querySelector('.overlay');
-  
-  let mouseX = 0;
-  let mouseY = 0;
-  let currentX = 0;
-  let currentY = 0;
-  let rect = card.getBoundingClientRect();
-  let hovering = false;
-  
   card.addEventListener('mousemove', (e) => {
-    rect = card.getBoundingClientRect();
-    mouseX = e.clientX - rect.left;
-    mouseY = e.clientY - rect.top;
-    hovering = true;
+  const rect = card.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  card.style.setProperty('--x', `${x}px`);
+  card.style.setProperty('--y', `${y}px`);
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+  const rotateX = ((y - centerY) / centerY) * 10;
+  const rotateY = ((x - centerX) / centerX) * -10;
+  card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  const angle = 135 + rotateX - rotateY;
+  card.style.setProperty('--angle', `${angle}deg`);
   });
-  
   card.addEventListener('mouseleave', () => {
-    hovering = false;
+  card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+  card.style.setProperty('--angle', `135deg`);
   });
-  
-  function animate() {
-    currentX += (mouseX - currentX) * 0.08;
-    currentY += (mouseY - currentY) * 0.08;
-  
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-  
-    let rotateX, rotateY;
-  
-    if (hovering) {
-      rotateX = ((currentY - centerY) / centerY) * 10;
-      rotateY = ((currentX - centerX) / centerX) * -10;
-    } else {
-      rotateX *= 0.9;
-      rotateY *= 0.9;
-    }
-  
-    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-  
-    const angle = 135 + rotateX - rotateY;
-    card.style.setProperty('--angle', `${angle}deg`);
-    card.style.setProperty('--x', `${currentX}px`);
-    card.style.setProperty('--y', `${currentY}px`);
-  
-    requestAnimationFrame(animate);
-  }
-  
-  animate();
 
 // --------------------------------------- © 2025 - ZiolKen • ジオルケン --------------------------------------- //
