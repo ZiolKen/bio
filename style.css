@@ -389,7 +389,7 @@
     }
 
     .links .btn {
-      box-shadow: 0 0 15px rgba(168, 85, 247, 0.6), 0 0 30px rgba(249, 168, 212, 0.5);
+      filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.6)) drop-shadow(0 0 30px rgba(249, 168, 212, 0.5));
       display: inline-flex;
       transition: background 0.3s ease, transform 0.2s ease;
       cursor: pointer;
