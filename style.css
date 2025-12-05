@@ -367,7 +367,7 @@
     }
 
     .btn img {
-      filter: drop-shadow(0 0 6px #f9a8d4) drop-shadow(0 0 10px #a855f7);
+      filter: drop-shadow(0 0 15px #f9a8d4) drop-shadow(0 0 15px #a855f7);
       width: 40px;
       height: 40px;
       transition: transform 0.2s ease, filter 0.3s ease;
@@ -375,7 +375,7 @@
 
     .btn img:hover {
       transform: scale(1.1);
-      filter: drop-shadow(0 0 10px #f9a8d4) drop-shadow(0 0 14px #a855f7);
+      filter: drop-shadow(0 0 20px #f9a8d4) drop-shadow(0 0 20px #a855f7);
     }
 
     .links {
