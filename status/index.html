@@ -28,14 +28,15 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="@ジオルケン | Bot Status" />
   <meta name="twitter:description" content="@ジオルケン | Discord bot status, current system info & status, real-time update. • @ZiolKen." />
-  <link rel="stylesheet" href="status/style.css" />
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="styleaheet" href="./status/style.css" />
 </head>
 
 <body>
 <header class="container">
   <div class="Header">
       <img src="https://files.catbox.moe/as98bi.png" alt="BOTSTATUS">
-      <button class="ibtn"><a href="https://discord.com/oauth2/authorize?client_id=1398238289500307578&scope=bot&permissions=8" target="_blank"><img src="status/assets/discord.png"></a></button>
+      <button class="ibtn"><a href="https://discord.com/oauth2/authorize?client_id=1398238289500307578&scope=bot&permissions=8" target="_blank"><img src="./assets/discord.png"></a></button>
   </div>
 
   <div id="global-status" class="status-banner loading">
@@ -56,7 +57,7 @@
 
   <!-- SERVICES -->
   <section class="card">
-    <h2>Services</h2>
+    <h2>⚙️ Services</h2>
     <div id="service-host" class="service-card"></div>
     <div id="service-gateway" class="service-card"></div>
     <div id="service-api" class="service-card"></div>
@@ -65,19 +66,19 @@
 
   <!-- INCIDENTS -->
   <section class="card">
-    <h2>Incidents</h2>
+    <h2>🚨 Incidents</h2>
     <div id="incidents">Loading…</div>
   </section>
 
   <!-- CHART -->
   <section class="card">
-    <h2>Ping History</h2>
+    <h2>📉 Ping History</h2>
     <canvas id="pingChart" height="90"></canvas>
   </section>
 
   <!-- TECH -->
   <section class="card tech">
-    <h2>Technical Information</h2>
+    <h2>🔧 Technical Information</h2>
     <div class="tech-grid">
       <div><span>Last update</span><b id="updated">--</b></div>
       <div><span>Last boot</span><b id="boot">--</b></div>
@@ -98,7 +99,12 @@
 const STATUS_URL = "https://discord-bot-us.onrender.com/status";
 const INCIDENTS_URL = "https://discord-bot-us.onrender.com/incidents";
 
-/* ===== CHART ===== */
+function normalizeState(state) {
+  if (["online", "operational", "up"].includes(state)) return "online";
+  if (["degraded", "partial"].includes(state)) return "degraded";
+  return "down";
+}
+
 const pingHistory = [];
 const MAX = 30;
 
@@ -131,9 +137,54 @@ const uptime = s => {
   return t===0?"100%":((s.up/t)*100).toFixed(2)+"%";
 };
 
+function fmtTime(t) {
+  return new Date(t).toLocaleString();
+}
+
+function duration(start, end) {
+  const ms = new Date(end) - new Date(start);
+  const m = Math.floor(ms / 60000);
+  const s = Math.floor((ms % 60000) / 1000);
+  return `${m}m ${s}s`;
+}
+
+function fetchWithTimeout(url, timeout = 1000) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+
+  return fetch(url, { signal: controller.signal })
+    .finally(() => clearTimeout(id));
+}
+
 /* ===== RENDER ===== */
+function getDegradedServices(incidents) {
+  const set = new Set();
+
+  incidents.forEach(i => {
+    if (!i.resolvedAt && i.status !== "resolved") {
+      set.add(i.service);
+    }
+  });
+
+  return set;
+}
+
+function applyIncidentState(serviceName, baseState, degradedSet) {
+  if (baseState !== "online") return baseState;
+  return degradedSet.has(serviceName) ? "degraded" : "online";
+}
+
 function renderService(id, name, state) {
-  state==="online"?stats[id].up++:stats[id].down++;
+  state === "online"
+    ? stats[id].up++
+    : stats[id].down++;
+
+  const label =
+    state === "online"
+      ? "• Operational"
+      : state === "degraded"
+      ? "• Degraded"
+      : "• Down";
 
   document.getElementById(`service-${id}`).innerHTML = `
     <div>
@@ -141,7 +192,7 @@ function renderService(id, name, state) {
       <div class="service-meta">Uptime: ${uptime(stats[id])}</div>
     </div>
     <div class="service-status ${state}">
-      ${state==="online"?"• Operational":"• Down"}
+      ${label}
     </div>`;
 }
 
@@ -152,9 +203,14 @@ function renderGlobal(status, incidents) {
   let cls="ok", msg="All Systems Operational";
 
   if (status.hostService === "down") {
-    cls="down"; msg="Major System Outage";
-  } else if (incidents.some(i=>!i.resolvedAt)) {
-    cls="degraded"; msg="Partial System Outage";
+    cls="down";
+    msg="Major System Outage";
+  } else if (
+    status.hostService === "degraded" ||
+    incidents.some(i => !i.resolvedAt)
+  ) {
+    cls="degraded";
+    msg="Partial System Outage";
   }
 
   box.className = `status-banner ${cls}`;
@@ -163,26 +219,54 @@ function renderGlobal(status, incidents) {
 
 function renderIncidents(list) {
   const el = document.getElementById("incidents");
-  if (!list.length) {
-    el.textContent = "No incidents 🎉";
+
+  if (!list || !list.length) {
+    el.innerHTML = `<div class="incident-empty">No incidents 🎉</div>`;
     return;
   }
-  el.innerHTML = "";
-  list.forEach(i=>{
-    el.innerHTML+=`
-      <div class="incident ${i.resolvedAt?"resolved":"active"}">
-        <strong>${i.title}</strong><br>
-        ${i.service} • ${i.resolvedAt?"Resolved":"Investigating"}
-      </div>`;
-  });
+
+  el.innerHTML = `<div class="incident-list"></div>`;
+  const wrap = el.firstChild;
+
+  list
+    .sort((a, b) => new Date(b.startedAt) - new Date(a.startedAt))
+    .forEach(i => {
+      const resolved = i.status === "resolved";
+      const dur = resolved
+        ? duration(i.startedAt, i.resolvedAt)
+        : "Ongoing";
+
+      wrap.innerHTML += `
+        <div class="incident-item ${resolved ? "resolved" : "active"}">
+          <span class="incident-dot"></span>
+
+          <div class="incident-title">
+            ${i.title}
+            <span class="incident-badge ${resolved ? "resolved" : "active"}">
+              ${resolved ? "Resolved" : "Investigating"}
+            </span>
+          </div>
+
+          <div class="incident-meta">
+            Service: <b>${i.service.toUpperCase()}</b>
+          </div>
+
+          <div class="incident-time">
+            Started: ${fmtTime(i.startedAt)}<br>
+            ${resolved ? `Resolved: ${fmtTime(i.resolvedAt)}<br>` : ""}
+            Duration: ${dur}
+          </div>
+        </div>
+      `;
+    });
 }
 
 /* ===== LOAD ===== */
 async function load() {
   try {
-    const [s,i] = await Promise.all([
-      fetch(STATUS_URL).then(r=>r.json()),
-      fetch(INCIDENTS_URL).then(r=>r.json())
+    const [s, incidents] = await Promise.all([
+      fetchWithTimeout(STATUS_URL).then(r => r.json()),
+      fetchWithTimeout(INCIDENTS_URL).then(r => r.json())
     ]);
 
     document.getElementById("ping").textContent = `${Math.round(s.ping)} ms`;
@@ -193,24 +277,54 @@ async function load() {
 
     document.getElementById("updated").textContent =
       new Date(s.updated).toLocaleString();
+
     document.getElementById("boot").textContent =
       new Date(s.lastBoot).toLocaleString();
-      
-    const hostState =
-      s.hostService === "operational" ? "online" : "down";
-    
-    renderService("host", "Host System", hostState);
-    renderService("gateway","Discord Gateway",s.services.gateway);
-    renderService("api","API Endpoint",s.services.api);
-    renderService("commands","Command System",s.services.commands);
 
-    renderIncidents(i);
-    renderGlobal(s,i);
     chartPush(s.ping);
 
-  } catch {
-    const box=document.getElementById("global-status");
-    box.className="status-banner down";
+    const degradedSet = getDegradedServices(incidents);
+
+    const hostState = applyIncidentState(
+      "host",
+      normalizeState(s.hostService),
+      degradedSet
+    );
+
+    const gatewayState = applyIncidentState(
+      "gateway",
+      normalizeState(s.services.gateway),
+      degradedSet
+    );
+
+    const apiState = applyIncidentState(
+      "api",
+      normalizeState(s.services.api),
+      degradedSet
+    );
+
+    const commandState = applyIncidentState(
+      "commands",
+      normalizeState(s.services.commands),
+      degradedSet
+    );
+
+    renderService("host", "Host System", hostState);
+    renderService("gateway", "Discord Gateway", gatewayState);
+    renderService("api", "API Endpoint", apiState);
+    renderService("commands", "Command System", commandState);
+
+    renderIncidents(incidents);
+
+    renderGlobal(
+      { hostService: hostState },
+      incidents
+    );
+
+  } catch (e) {
+    console.error(e);
+    const box = document.getElementById("global-status");
+    box.className = "status-banner down";
     document.getElementById("global-text").textContent =
       "Status service unreachable";
   }
