@@ -53,7 +53,7 @@ header { padding:32px 0; }
 
 /* GLOBAL STATUS */
 .status-banner {
-  margin-top: 45px;
+  margin-top: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -128,7 +128,7 @@ header { padding:32px 0; }
 }
 
 .card span { color:var(--muted); font-size:13px; }
-.card strong { display:block; margin-top:6px; font-size:20px; }
+.card strong { display:block; margin-top:1px; font-size:20px; }
 
 /* SERVICES */
 .service-card {
@@ -147,14 +147,74 @@ header { padding:32px 0; }
 .service-status.offline { color:var(--red); }
 
 /* INCIDENTS */
-.incident {
-  border-left:4px solid;
-  padding:12px;
-  border-radius:8px;
-  margin-bottom:10px;
+.incident-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
-.incident.active { border-color:var(--red); background:#160b0b; }
-.incident.resolved { border-color:var(--green); background:#0b160f; }
+
+.incident-item {
+  position: relative;
+  padding-left: 22px;
+  border-left: 2px solid #2a2a2a;
+}
+
+.incident-dot {
+  position: absolute;
+  left: -7px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.incident-item.resolved .incident-dot {
+  background: #22c55e;
+}
+
+.incident-item.active .incident-dot {
+  background: #ef4444;
+}
+
+.incident-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.incident-meta {
+  font-size: 13px;
+  opacity: .8;
+  margin-bottom: 6px;
+}
+
+.incident-time {
+  font-size: 12px;
+  opacity: .7;
+}
+
+.incident-badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  font-size: 11px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.incident-badge.resolved {
+  background: rgba(34,197,94,.15);
+  color: #22c55e;
+}
+
+.incident-badge.active {
+  background: rgba(239,68,68,.15);
+  color: #ef4444;
+}
+
+.incident-empty {
+  opacity: .7;
+  font-size: 14px;
+}
 
 /* TECH */
 .tech-grid {
