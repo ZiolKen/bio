@@ -1064,33 +1064,6 @@ textarea {
   border-radius: 10px;
 }
 
-.main-grid {
-  align-items: start;
-}
-
-.main-grid > div:nth-child(2) {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  min-width: 0;
-}
-
-.main-grid > div:nth-child(2) > * {
-  min-width: 0;
-}
-
-.main-grid > div:nth-child(2){
-  min-width: 0;
-}
-
-.music-card .section-card{
-  padding: 18px;
-}
-
-.music-card .aspect-square{
-  aspect-ratio: 16 / 9 !important;
-}
-
 .music-card h3,
 .music-card p{
   white-space: nowrap;
