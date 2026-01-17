@@ -499,8 +499,8 @@ textarea {
 .lay-container {
   position: absolute;
   top: -154px;
-  right: 13%;
-  width: 400px;
+  right: 11%;
+  width: 380px;
   z-index: 99;
   pointer-events: none;
 }
