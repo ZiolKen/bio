@@ -192,9 +192,9 @@
 
     const setLoading = () => {
       projectsGrid.innerHTML = `
-        <div class="project-card skeleton" style="width:230px; height:90px;"></div>
-        <div class="project-card skeleton" style="width:230px; height:90px;"></div>
-        <div class="project-card skeleton" style="width:230px; height:90px;"></div>
+        <div class="project-card skeleton" style="width:250px; height:170px;"></div>
+        <div class="project-card skeleton" style="width:250px; height:170px;"></div>
+        <div class="project-card skeleton" style="width:250px; height:170px;"></div>
       `;
     };
 
