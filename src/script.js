@@ -154,7 +154,7 @@
         <a class="project-card" href="${url}" target="_blank" rel="noreferrer">
           <div class="project-card-head">
             <div class="project-left">
-              <div class="project-icon" aria-hidden="true"></div>
+              <div class="project-icon" src="res/default.png" alt="Project Icon" loading="lazy"></div>
               <div class="project-name">${name}</div>
             </div>
 
@@ -186,9 +186,9 @@
 
     const setLoading = () => {
       projectsGrid.innerHTML = `
-        <div class="project-card skeleton" style="width:420px; height:220px;"></div>
-        <div class="project-card skeleton" style="width:420px; height:220px;"></div>
-        <div class="project-card skeleton" style="width:420px; height:220px;"></div>
+        <div class="project-card skeleton" style="width:230px; height:90px;"></div>
+        <div class="project-card skeleton" style="width:230px; height:90px;"></div>
+        <div class="project-card skeleton" style="width:230px; height:90px;"></div>
       `;
     };
 
