@@ -1083,18 +1083,6 @@ textarea {
   min-width: 0;
 }
 
-.right-grid{
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-  gap: 20px;
-  align-items: start;
-  min-width: 0;
-}
-
-.right-grid > *{
-  min-width: 0;
-}
-
 .music-card .section-card{
   padding: 18px;
 }
@@ -1324,10 +1312,4 @@ textarea {
 
 .music-card .absolute.inset-0{
   opacity: .18 !important;
-}
-
-@media (max-width: 900px){
-  .right-grid{
-    grid-template-columns: 1fr;
-  }
 }
