@@ -10,111 +10,163 @@
 
   if (musicRoot && !musicRoot.id) musicRoot.id = 'music-card';
   if (projectsGrid && !projectsGrid.id) projectsGrid.id = 'projects-grid';
+  
+  window.musicTracks = [
+    { title: "Bloody Moon", artist: "Unknown", src: "assets/bloody_moon.mp3", cover: "res/music.png", dur: "3:12" },
+    { title: "Empire", artist: "Ogryzek", src: "res/music/empire.mp3", cover: "res/empire.png", dur: "2:48" },
+  ];
 
-  const MusicPlayer = (() => {
-    if (!musicRoot) return null;
+  const tracks = window.musicTracks || [];
 
-    const titleEl = $('h3', musicRoot);
-    const artistEl = $('p', musicRoot);
-    const progressWrap = musicRoot.querySelector('.w-full.h-0\\.5') || musicRoot.querySelector('.w-full');
-    const progressBar = progressWrap ? progressWrap.querySelector('div') : null;
+  const audio = $("#audio");
+  const list = $("#music-list");
+  const titleEl = $("#music-title");
+  const artistEl = $("#music-artist");
+  const coverEl = $("#music-cover-img");
+  const fillEl = $("#music-bar-fill");
+  const curEl = $("#music-cur");
+  const durEl = $("#music-dur");
+  const badgeEl = $("#music-badge");
 
-    const btns = Array.from(musicRoot.querySelectorAll('button'));
-    const btnPlay = btns[1] || null;
+  const playBtn = $("#music-play");
+  const toggleBtn = $("#music-toggle");
+  const prevBtn = $("#music-prev");
+  const nextBtn = $("#music-next");
+  const backBtn = $("#music-back");
+  const forwardBtn = $("#music-forward");
+  const shuffleBtn = $("#music-shuffle");
+  const loopBtn = $("#music-loop");
 
-    const imgEl = $('img', musicRoot);
+  if (!audio || !list || !playBtn) return;
 
-    const track = { title: 'Bloody Moon', artist: 'Unknown', src: 'https://raw.githubusercontent.com/ZiolKen/bio/main/assets/bloody_moon.mp3', cover: './res/music.png' };
+  let idx = 0;
+  let shuffled = false;
+  let loop = false;
+  let order = tracks.map((_, i) => i);
 
-    const audio = new Audio(track.src);
-    audio.preload = 'auto';
+  function fmt(t){
+    if (!Number.isFinite(t) || t < 0) return "0:00";
+    const m = Math.floor(t / 60);
+    const s = Math.floor(t % 60);
+    return `${m}:${String(s).padStart(2,"0")}`;
+  }
 
-    let raf = 0;
-
-    const setProgress = (pct) => {
-      if (!progressBar) return;
-      const p = Math.max(0, Math.min(100, pct));
-      progressBar.style.width = `${p}%`;
-    };
-
-    const setPlayIcon = (playing) => {
-      if (!btnPlay) return;
-      const svg = btnPlay.querySelector('svg');
-      if (!svg) return;
-      svg.setAttribute('viewBox', '0 0 448 512');
-      svg.innerHTML = playing
-        ? '<path d="M144 479H48c-26.5 0-48-21.5-48-48V80c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v351c0 26.5-21.5 48-48 48zm304-48V80c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v351c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"></path>'
-        : '<path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>';
-    };
-
-    const tick = () => {
-      cancelAnimationFrame(raf);
-      const d = audio.duration || 0;
-      const c = audio.currentTime || 0;
-      setProgress(d ? (c / d) * 100 : 0);
-      if (!audio.paused) raf = requestAnimationFrame(tick);
-    };
-
-    const render = () => {
-      if (titleEl) titleEl.textContent = track.title;
-      if (artistEl) artistEl.textContent = track.artist;
-      if (imgEl && track.cover) imgEl.src = track.cover;
-      setProgress(0);
-      setPlayIcon(false);
-    };
-
-    const play = async () => {
-      try {
-        await audio.play();
-      } catch (_) {
-        setPlayIcon(false);
-      }
-    };
-
-    const pause = () => audio.pause();
-
-    const toggle = () => {
-      if (audio.paused) play();
-      else pause();
-    };
-
-    const seekFromEvent = (e) => {
-      if (!progressWrap) return;
-      const rect = progressWrap.getBoundingClientRect();
-      const clientX = e.touches?.[0]?.clientX ?? e.clientX;
-      const x = clientX - rect.left;
-      const ratio = Math.max(0, Math.min(1, x / rect.width));
-      if (audio.duration) audio.currentTime = ratio * audio.duration;
-      tick();
-    };
-
-    if (btnPlay) btnPlay.addEventListener('click', toggle);
-
-    if (progressWrap) {
-      progressWrap.style.cursor = 'pointer';
-      progressWrap.addEventListener('click', seekFromEvent, { passive: true });
-      progressWrap.addEventListener('touchstart', seekFromEvent, { passive: true });
+  function rebuildOrder(){
+    order = tracks.map((_, i) => i);
+    if (!shuffled) return;
+    for (let i = order.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
     }
+  }
 
-    audio.addEventListener('play', () => {
-      setPlayIcon(true);
-      tick();
+  function setActive(realIndex, autoplay=false){
+    idx = realIndex;
+    const t = tracks[idx];
+    if (!t) return;
+
+    audio.src = t.src;
+    titleEl.textContent = t.title || "Unknown";
+    artistEl.textContent = t.artist || "Unknown";
+    coverEl.src = t.cover || "res/music.png";
+
+    [...list.querySelectorAll(".music-item")].forEach((el) => {
+      el.classList.toggle("active", Number(el.dataset.i) === idx);
     });
 
-    audio.addEventListener('pause', () => {
-      setPlayIcon(false);
-      cancelAnimationFrame(raf);
-    });
+    fillEl.style.width = "0%";
+    curEl.textContent = "0:00";
+    durEl.textContent = t.dur || "0:00";
+    badgeEl.textContent = "00:00";
 
-    audio.addEventListener('ended', () => {
-      audio.currentTime = 0;
-      setPlayIcon(false);
-      setProgress(0);
-    });
+    if (autoplay) audio.play().catch(() => {});
+    syncPlayUI();
+  }
 
-    render();
-    return { play, pause };
-  })();
+  function syncPlayUI(){
+    const playing = !audio.paused;
+    playBtn.textContent = playing ? "⏸" : "▶";
+    toggleBtn.textContent = playing ? "Pause" : "Play";
+  }
+
+  function next(){
+    if (!tracks.length) return;
+    const currentPos = order.indexOf(idx);
+    const nextPos = (currentPos + 1) % order.length;
+    setActive(order[nextPos], true);
+  }
+
+  function prev(){
+    if (!tracks.length) return;
+    const currentPos = order.indexOf(idx);
+    const prevPos = (currentPos - 1 + order.length) % order.length;
+    setActive(order[prevPos], true);
+  }
+
+  function renderList(){
+    list.innerHTML = "";
+    tracks.forEach((t, i) => {
+      const item = document.createElement("div");
+      item.className = "music-item";
+      item.dataset.i = String(i);
+      item.innerHTML = `
+        <div class="music-item-left">
+          <div class="music-item-title"></div>
+          <div class="music-item-artist"></div>
+        </div>
+        <div class="music-item-right"></div>
+      `;
+      item.querySelector(".music-item-title").textContent = t.title || "Unknown";
+      item.querySelector(".music-item-artist").textContent = t.artist || "Unknown";
+      item.querySelector(".music-item-right").textContent = t.dur || "";
+      item.addEventListener("click", () => setActive(i, true));
+      list.appendChild(item);
+    });
+  }
+
+  playBtn.addEventListener("click", () => {
+    if (audio.paused) audio.play().catch(() => {});
+    else audio.pause();
+    syncPlayUI();
+  });
+  toggleBtn.addEventListener("click", () => playBtn.click());
+  prevBtn.addEventListener("click", prev);
+  nextBtn.addEventListener("click", next);
+  backBtn.addEventListener("click", () => { audio.currentTime = Math.max(0, audio.currentTime - 10); });
+  forwardBtn.addEventListener("click", () => { audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 10); });
+
+  shuffleBtn.addEventListener("click", () => {
+    shuffled = !shuffled;
+    shuffleBtn.classList.toggle("is-on", shuffled);
+    rebuildOrder();
+  });
+
+  loopBtn.addEventListener("click", () => {
+    loop = !loop;
+    loopBtn.classList.toggle("is-on", loop);
+    audio.loop = loop;
+  });
+
+  audio.addEventListener("play", syncPlayUI);
+  audio.addEventListener("pause", syncPlayUI);
+
+  audio.addEventListener("timeupdate", () => {
+    const d = audio.duration || 0;
+    const c = audio.currentTime || 0;
+    const pct = d ? (c / d) * 100 : 0;
+    fillEl.style.width = `${pct}%`;
+    curEl.textContent = fmt(c);
+    badgeEl.textContent = fmt(c);
+    if (d) durEl.textContent = fmt(d);
+  });
+
+  audio.addEventListener("ended", () => {
+    if (!loop) next();
+  });
+
+  renderList();
+  rebuildOrder();
+  setActive(0, false);
 
   const FeaturedProjects = (() => {
     if (!projectsGrid) return null;
