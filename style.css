@@ -1083,3 +1083,52 @@ textarea {
 .main-grid > div:nth-child(2) > * {
   min-width: 0;
 }
+
+/* ===== RIGHT COLUMN GRID (fix PC messy cards) ===== */
+.main-grid > div:nth-child(2){
+  min-width: 0;
+}
+
+/* container grid that makes md:col-span / lg:* work */
+.right-grid{
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 20px;
+  align-items: start;
+  min-width: 0;
+}
+
+/* ensure children can shrink instead of pushing layout */
+.right-grid > *{
+  min-width: 0;
+}
+
+/* MUSIC: stop it from looking "too big / tall" */
+.music-card .section-card{
+  padding: 18px;               /* đồng bộ */
+}
+
+/* cái ảnh đang aspect-square => làm nó gọn lại trên PC */
+.music-card .aspect-square{
+  aspect-ratio: 16 / 9 !important;
+}
+
+/* tránh text làm phình */
+.music-card h3,
+.music-card p{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* nếu cái overlay gradient làm rối mắt, giảm */
+.music-card .absolute.inset-0{
+  opacity: .18 !important;
+}
+
+/* responsive */
+@media (max-width: 900px){
+  .right-grid{
+    grid-template-columns: 1fr; /* xếp dọc */
+  }
+}
