@@ -97,7 +97,59 @@
         </div>
 
         <div>
-          <div><!--Music--></div>
+          <div class="music-card" id="music-card">
+            <div class="music-cover">
+              <img id="music-cover-img" draggable="false" alt="" />
+              <button class="music-vol" id="music-mute" type="button" aria-label="Mute">
+                <span class="mvb" style="--i:0"></span>
+                <span class="mvb" style="--i:1"></span>
+                <span class="mvb" style="--i:2"></span>
+                <span class="mvb" style="--i:3"></span>
+                <span class="mvb" style="--i:4"></span>
+                <span class="mvb" style="--i:5"></span>
+              </button>
+            </div>
+          
+            <div class="music-meta">
+              <div class="music-title" id="music-title"></div>
+              <div class="music-artist" id="music-artist"></div>
+          
+              <div class="music-progress" id="music-progress" role="slider" aria-label="Seek" tabindex="0">
+                <div class="music-progress-fill" id="music-progress-fill"></div>
+                <div class="music-progress-knob" id="music-progress-knob"></div>
+              </div>
+          
+              <div class="music-controls">
+                <button class="music-btn" id="music-prev" type="button" aria-label="Previous">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                    <path d="M6 6h2v12H6zM20 6v12l-10-6z"></path>
+                  </svg>
+                </button>
+          
+                <button class="music-btn music-btn-main" id="music-play" type="button" aria-label="Play/Pause">
+                  <span class="icon-play">
+                    <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+                      <path d="M8 5v14l12-7z"></path>
+                    </svg>
+                  </span>
+                  <span class="icon-pause">
+                    <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+                      <path d="M7 6h4v12H7zM13 6h4v12h-4z"></path>
+                    </svg>
+                  </span>
+                </button>
+          
+                <button class="music-btn" id="music-next" type="button" aria-label="Next">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                    <path d="M16 6h2v12h-2zM4 6v12l10-6z"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          
+            <audio id="music-audio" preload="metadata"></audio>
+          </div>
+          </div>
         </div>
       </div>
 
@@ -160,7 +212,6 @@
               <span class="contact-right">@ziolken →</span>
             </a>
             </div>
-          </div>
         </div>
 
         <div class="stack-col">
@@ -210,5 +261,7 @@
     <script src="app.js"></script>
     <script src="src/script.js"></script>
     <script src="src/terminal.js"></script>
+    <script src="src/music.js"></script>
   </body>
+  
 </html>
