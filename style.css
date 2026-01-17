@@ -1142,10 +1142,10 @@ textarea {
 
 .project-card {
   flex: 0 0 auto;
-  width: 420px;
-  max-width: 86vw;
+  width: 230px;
+  max-width: 68vw;
 
-  padding: 22px 22px 18px;
+  padding: 14px 14px 10px;
   border-radius: 22px;
 
   background: rgba(18, 18, 22, 0.86);
@@ -1215,7 +1215,7 @@ textarea {
 }
 
 .project-name {
-  font-size: 34px;
+  font-size: 22px;
   line-height: 1.06;
   font-weight: 820;
   letter-spacing: -0.02em;
@@ -1238,7 +1238,7 @@ textarea {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 18px;
+  font-size: 12px;
   font-weight: 700;
   white-space: nowrap;
 }
@@ -1262,7 +1262,7 @@ textarea {
 
 .project-desc {
   color: rgba(255, 255, 255, 0.55);
-  font-size: 18px;
+  font-size: 14px;
   line-height: 1.45;
 
   display: -webkit-box;
@@ -1270,7 +1270,7 @@ textarea {
   -webkit-box-orient: vertical;
   overflow: hidden;
 
-  min-height: 78px;
+  min-height: 60px;
 }
 
 .project-foot {
