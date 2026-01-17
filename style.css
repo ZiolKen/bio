@@ -1086,3 +1086,235 @@ textarea {
 
 .music-btn svg{width:20px;height:20px}
 .music-btn-main svg{width:30px;height:30px}
+
+#projects-grid {
+  display: flex;
+  gap: 18px;
+}
+
+#projects-grid.projects-marquee {
+  position: relative;
+  overflow: hidden;
+  padding: 10px 0 8px;
+}
+
+#projects-grid .projects-track {
+  display: flex;
+  gap: 18px;
+  padding: 6px 2px;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+#projects-grid.projects-marquee::before,
+#projects-grid.projects-marquee::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 70px;
+  pointer-events: none;
+  z-index: 2;
+}
+#projects-grid.projects-marquee::before {
+  left: 0;
+  background: linear-gradient(90deg, rgba(0,0,0,0.85), rgba(0,0,0,0));
+}
+#projects-grid.projects-marquee::after {
+  right: 0;
+  background: linear-gradient(270deg, rgba(0,0,0,0.85), rgba(0,0,0,0));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #projects-grid.projects-marquee {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+  #projects-grid .projects-track {
+    transform: none !important;
+  }
+  #projects-grid.projects-marquee::before,
+  #projects-grid.projects-marquee::after {
+    display: none;
+  }
+}
+
+.project-card {
+  flex: 0 0 auto;
+  width: 420px;
+  max-width: 86vw;
+
+  padding: 22px 22px 18px;
+  border-radius: 22px;
+
+  background: rgba(18, 18, 22, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
+
+  text-decoration: none;
+  color: inherit;
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.project-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(18, 18, 22, 0.92);
+}
+
+.project-card:active {
+  transform: translateY(0);
+}
+
+.project-card:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.35);
+  outline-offset: 3px;
+}
+
+.project-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.project-left {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.project-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.05));
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
+  position: relative;
+}
+
+.project-icon::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.20);
+  transform: rotate(15deg);
+  opacity: 0.7;
+}
+
+.project-name {
+  font-size: 34px;
+  line-height: 1.06;
+  font-weight: 820;
+  letter-spacing: -0.02em;
+  color: rgba(245, 247, 255, 0.98);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.project-metrics {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.70);
+}
+
+.metric {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 18px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.metric.github {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  justify-content: center;
+
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.metric.github svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+  opacity: 0.9;
+}
+
+.project-desc {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 18px;
+  line-height: 1.45;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  min-height: 78px;
+}
+
+.project-foot {
+  margin-top: auto;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.chip {
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+
+  color: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.chip.link {
+  cursor: pointer;
+  background: rgba(120, 201, 255, 0.10);
+  border-color: rgba(120, 201, 255, 0.20);
+}
+
+.project-card.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+}
+.project-card.skeleton::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.10) 40%,
+    rgba(255,255,255,0) 80%
+  );
+  transform: translateX(-40%);
+  animation: shimmer 1.2s infinite linear;
+}
+@keyframes shimmer {
+  to { transform: translateX(40%); }
+}
