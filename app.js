@@ -97,7 +97,7 @@ function updateStatus(p) {
   if (banner) {
     if (p.kv?.banner && p.discord_user) {
       banner.style.display = "block";
-      if (!banner.src.endsWith("")) banner.src = "https://i.pinimg.com/originals/31/e1/03/31e1037b1b30c313806263929812df66.gif";
+      if (!banner.src.endsWith("res/banner.png")) banner.src = "res/banner.png";
     } else {
       banner.style.display = "none";
     }
