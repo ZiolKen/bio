@@ -1026,4 +1026,60 @@ textarea {
 
 .terminal-input{
   caret-color: var(--term-accent);
-  }
+}
+
+/* ===== Music card: make it consistent & clean on PC ===== */
+.music-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-card);
+  border-radius: 12px;
+  padding: 18px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  min-width: 0;
+}
+
+.music-card:hover {
+  border-color: rgba(139,148,158,.35);
+}
+
+/* Kill weird spacing from utility stacks if needed */
+.music-card * {
+  min-width: 0;
+}
+
+/* Nếu trong music card có khối ảnh bìa dạng aspect-square -> đổi sang 16:9 cho đỡ “to đùng” */
+.music-card .aspect-square {
+  aspect-ratio: 16 / 9 !important;
+  height: auto !important;
+}
+
+/* Clamp chữ để không làm card phình ngang */
+.music-card h3,
+.music-card p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Buttons gọn, đồng đều */
+.music-card button {
+  border-radius: 10px;
+}
+
+.main-grid {
+  align-items: start;
+}
+
+.main-grid > div:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.main-grid > div:nth-child(2) > * {
+  min-width: 0;
+}
