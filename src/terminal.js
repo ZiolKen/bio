@@ -9,9 +9,6 @@
 
     const promptBase = $("#terminal-prompt")?.textContent?.trim() || "root@ziolken $";
 
-    // ===== Data bridge: reuse your existing page content if you want =====
-    // Option A: define window.portfolioState = { projects:[...], contacts:[...], tracks:[...] }
-    // Option B: parse from DOM (contacts are already in HTML)
     const state = {
       theme: localStorage.getItem("portfolio_term_theme") || "night",
       history: loadHistory(),
@@ -23,7 +20,6 @@
       contacts: (window.portfolioState?.contacts) || (window.state?.contacts) || parseContactsFromDOM(),
     };
 
-    // ===== Output helpers =====
     function scrollBottom(){ out.scrollTop = out.scrollHeight; }
 
     function write(line, cls){
@@ -37,7 +33,7 @@
     function writeHTML(html, cls){
       const div = document.createElement("div");
       if (cls) div.className = cls;
-      div.innerHTML = html; // only use with trusted strings we create
+      div.innerHTML = html;
       out.appendChild(div);
       scrollBottom();
     }
@@ -68,7 +64,6 @@
       scrollBottom();
     }
 
-    // ===== History =====
     const HISTORY_KEY = "portfolio_term_history_v2";
     const MAX_HISTORY = 80;
 
@@ -111,7 +106,6 @@
       });
     }
 
-    // ===== Parsing =====
     function tokenize(str){
       const out = [];
       let cur = "", inQ = false, q = "";
@@ -133,7 +127,6 @@
       return { head: parts[0], args: [...parts.slice(1), ...args] };
     }
 
-    // ===== Theme =====
     function applyTheme(t){
       state.theme = t;
       localStorage.setItem("portfolio_term_theme", t);
@@ -141,7 +134,6 @@
     }
     applyTheme(state.theme);
 
-    // ===== Commands registry =====
     function register(cmd){
       state.commands.set(cmd.name, cmd);
       (cmd.aliases || []).forEach((a) => state.aliases.set(a, cmd.name));
@@ -155,7 +147,6 @@
       printTable(rows);
     }
 
-    // ---- Built-in commands ----
     register({
       name:"help",
       usage:"help [cmd]",
@@ -350,7 +341,6 @@
         .catch(() => write("Cannot autoplay. Click play in the player.", "term-bad"));
     }
 
-    // ===== Autocomplete (TAB) =====
     function autocomplete(){
       const v = input.value.trim();
       const parts = tokenize(v);
@@ -367,7 +357,6 @@
       }
     }
 
-    // ===== Runner =====
     async function run(cmd){
       const trimmed = cmd.trim();
       if (!trimmed) return;
@@ -395,7 +384,6 @@
       }
     }
 
-    // ===== Events =====
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter"){
         const v = input.value;
@@ -411,7 +399,6 @@
 
     terminalRoot.addEventListener("mousedown", () => input.focus());
 
-    // Clickable chips (data-cmd)
     out.addEventListener("click", (e) => {
       const el = e.target.closest("[data-cmd]");
       if (!el) return;
@@ -419,15 +406,12 @@
       if (cmd) run(cmd);
     });
 
-    // Intro
     writeHTML(
       `<span class="term-muted">Type <b>help</b> • <b>banner</b> • <b>projects</b> • <b>contact</b> • <b>theme matrix</b></span>`
     );
     setTimeout(() => input.focus(), 120);
 
-    // ===== Helpers =====
     function parseContactsFromDOM(){
-      // parse your existing #contact-list anchors
       const list = $("#contact-list");
       if (!list) return [];
       const items = [...list.querySelectorAll("a.contact-item")];
