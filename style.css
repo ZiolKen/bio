@@ -1308,3 +1308,106 @@ textarea {
 .music-card .absolute.inset-0{
   opacity: .18 !important;
 }
+
+html, body { overflow-x: hidden; }
+
+body{
+  display: block;
+  align-items: unset;
+  justify-content: unset;
+}
+
+.container{
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  padding: clamp(14px, 2.2vw, 22px);
+}
+
+.main-grid,
+.bottom-grid{
+  display: grid;
+  gap: 20px;
+}
+
+.main-grid{
+  grid-template-columns: minmax(0, 1fr);
+  margin-bottom: 20px;
+}
+
+.bottom-grid{
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+@media (min-width: 981px){
+  .container{
+    display: grid;
+    grid-template-columns: minmax(380px, 430px) minmax(0, 1fr);
+    grid-template-areas:
+      "profile music"
+      "about   stack";
+    gap: 20px;
+    align-items: start;
+  }
+
+  .main-grid,
+  .bottom-grid{
+    display: contents;
+  }
+
+  .main-grid > div:nth-child(1){ grid-area: profile; min-width: 0; }
+  .main-grid > div:nth-child(2){ grid-area: music; min-width: 0; position: relative; }
+
+  .bottom-grid > div:nth-child(1){ grid-area: about; min-width: 0; }
+  .bottom-grid > div:nth-child(2){ grid-area: stack; min-width: 0; }
+
+  .stack-col{ gap: 20px; }
+
+  .projects-grid{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+:root{
+  --lay-top: -92px;
+  --lay-right: 22px;
+  --lay-width: clamp(260px, 30vw, 440px);
+  --lay-reserve: 46px;
+}
+
+@media (min-width: 981px){
+  .lay-container{
+    position: absolute;
+    top: var(--lay-top);
+    right: var(--lay-right);
+    width: var(--lay-width);
+    z-index: 2;
+    pointer-events: none;
+    margin: 0 !important;
+  }
+
+  #banner-img{
+    width: 100%;
+    height: auto;
+    display: block;
+    opacity: .95;
+  }
+
+  .music-card{
+    position: relative;
+    z-index: 3;
+    padding-top: calc(18px + var(--lay-reserve));
+  }
+}
+
+.profile-card{ height: auto; min-height: 295px; }
+#about-me-card{ height: auto; min-height: 320px; max-height: 420px; }
+
+@media (min-width: 981px) and (max-width: 1180px){
+  :root{
+    --lay-top: -82px;
+    --lay-right: 10px;
+    --lay-reserve: 40px;
+  }
+}
