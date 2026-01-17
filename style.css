@@ -927,3 +927,107 @@ textarea {
     background: var(--card-bg-solid) !important;
   }
 }
+
+/* ===== Terminal upgrades (compatible with your current .terminal styles) ===== */
+
+.terminal {
+  --term-bg: rgba(10, 12, 18, 0.6);
+  --term-fg: var(--text-main);
+  --term-muted: var(--text-secondary);
+  --term-border: rgba(48, 54, 61, 0.6);
+  --term-accent: #6aa9ff;
+  --term-good: #7ee787;
+  --term-bad: var(--error-red);
+}
+
+.terminal[data-theme="mono"]{
+  --term-bg: rgba(0,0,0,.7);
+  --term-fg: #f2f2f2;
+  --term-muted: rgba(242,242,242,.65);
+  --term-accent: #ffffff;
+}
+.terminal[data-theme="matrix"]{
+  --term-bg: rgba(3, 10, 5, .75);
+  --term-fg: #b6ffcc;
+  --term-muted: rgba(182,255,204,.7);
+  --term-accent: #2bff77;
+}
+.terminal[data-theme="glass"]{
+  --term-bg: rgba(16, 18, 24, .45);
+  backdrop-filter: blur(12px);
+}
+
+.terminal { background: var(--term-bg); }
+.terminal-body { color: var(--term-fg); }
+
+.term-link{
+  color: var(--term-accent);
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(255,255,255,.22);
+}
+.term-link:hover{ filter: brightness(1.12); }
+
+.term-hr{ margin: 10px 0; }
+.term-hr > span{
+  display:block;height:1px;background: rgba(255,255,255,.08);
+}
+
+/* clickable hints / chips */
+.term-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:2px 8px;
+  border-radius:999px;
+  border:1px solid rgba(139,148,158,.22);
+  background: rgba(48,54,61,.20);
+  color: var(--term-muted);
+  cursor: pointer;
+  user-select:none;
+}
+.term-chip:hover{ border-color: rgba(139,148,158,.35); }
+
+/* Table */
+.term-table{
+  display:grid;
+  gap: 0;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px;
+  overflow:hidden;
+  margin: 8px 0;
+}
+.term-row{
+  display:grid;
+  grid-template-columns: 60px 1.3fr 110px 1.7fr;
+}
+.term-row.term-head{
+  background: rgba(255,255,255,.04);
+  font-weight: 650;
+}
+.term-cell{
+  padding: 7px 10px;
+  border-top: 1px solid rgba(255,255,255,.06);
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow: ellipsis;
+}
+.term-row.term-head .term-cell{ border-top:none; }
+
+/* responsive: on small screens -> 2 columns */
+@media (max-width: 520px){
+  .term-row{ grid-template-columns: 1fr 1.4fr; }
+  .term-row .term-cell:nth-child(3),
+  .term-row .term-cell:nth-child(4){ display:none; }
+}
+
+/* small banner */
+.term-banner{
+  margin: 6px 0;
+  line-height: 1.15;
+  color: var(--term-muted);
+}
+
+/* subtle caret blink on input (optional) */
+.terminal-input{
+  caret-color: var(--term-accent);
+  }
