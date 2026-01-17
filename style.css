@@ -1307,3 +1307,54 @@ textarea {
 @keyframes shimmer {
   to { transform: translateX(40%); }
 }
+
+.project-card{
+  width: 250px;
+  max-width: 72vw;
+  padding: 14px 14px 12px;
+  border-radius: 18px;
+  gap: 10px;
+}
+
+.project-icon{
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+}
+
+.project-icon::after{ display:none; }
+
+.project-name{
+  font-size: 22px;
+  line-height: 1.08;
+}
+
+.project-desc{
+  font-size: 14px;
+  line-height: 1.4;
+  min-height: 54px;
+  -webkit-line-clamp: 3;
+}
+
+.metric{
+  font-size: 14px;
+}
+.metric.github{
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+}
+.metric.github svg{
+  width: 15px;
+  height: 15px;
+}
+
+.chip{
+  padding: 7px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+}
