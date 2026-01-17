@@ -1312,102 +1312,93 @@ textarea {
 html, body { overflow-x: hidden; }
 
 body{
-  display: block;
-  align-items: unset;
-  justify-content: unset;
+  display:block;
+  align-items:unset;
+  justify-content:unset;
 }
 
 .container{
   max-width: 1280px;
-  width: 100%;
-  margin: 0 auto;
+  width:100%;
+  margin:0 auto;
   padding: clamp(14px, 2.2vw, 22px);
 }
 
-.main-grid,
-.bottom-grid{
-  display: grid;
-  gap: 20px;
-}
+.main-grid, .bottom-grid{ display:grid; gap:20px; }
+.main-grid{ grid-template-columns:1fr; margin-bottom:20px; }
+.bottom-grid{ grid-template-columns:1fr; align-items:start; }
+.stack-col{ display:flex; flex-direction:column; gap:20px; }
 
-.main-grid{
-  grid-template-columns: minmax(0, 1fr);
-  margin-bottom: 20px;
-}
+.profile-card, .section-card, .music-card, .terminal { min-width:0; }
 
-.bottom-grid{
-  grid-template-columns: minmax(0, 1fr);
-  align-items: start;
+:root{
+  --lay-w: clamp(260px, 26vw, 420px);
+  --lay-x: 28px;
+  --lay-y: 120px;
 }
 
 @media (min-width: 981px){
   .container{
-    display: grid;
-    grid-template-columns: minmax(380px, 430px) minmax(0, 1fr);
-    grid-template-areas:
-      "profile music"
-      "about   stack";
-    gap: 20px;
-    align-items: start;
+    display:grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap:20px;
+    align-items:start;
   }
 
-  .main-grid,
-  .bottom-grid{
-    display: contents;
-  }
+  .main-grid, .bottom-grid{ display:contents; }
 
-  .main-grid > div:nth-child(1){ grid-area: profile; min-width: 0; }
-  .main-grid > div:nth-child(2){ grid-area: music; min-width: 0; position: relative; }
+  .main-grid > div:nth-child(1){ grid-column: 1 / span 5; }
+  .main-grid > div:nth-child(2){ grid-column: 6 / -1; position:relative; }
 
-  .bottom-grid > div:nth-child(1){ grid-area: about; min-width: 0; }
-  .bottom-grid > div:nth-child(2){ grid-area: stack; min-width: 0; }
+  .bottom-grid > div:nth-child(1){ grid-column: 1 / span 6; }
+  .bottom-grid > div:nth-child(2){ grid-column: 7 / -1; }
 
-  .stack-col{ gap: 20px; }
+  .projects-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
-  .projects-grid{
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-:root{
-  --lay-top: -92px;
-  --lay-right: 22px;
-  --lay-width: clamp(260px, 30vw, 440px);
-  --lay-reserve: 46px;
-}
-
-@media (min-width: 981px){
   .lay-container{
-    position: absolute;
-    top: var(--lay-top);
-    right: var(--lay-right);
-    width: var(--lay-width);
-    z-index: 2;
-    pointer-events: none;
-    margin: 0 !important;
+    position:absolute;
+    width: var(--lay-w);
+    right: var(--lay-x);
+    top: var(--lay-y);
+    z-index: 4;
+    pointer-events:none;
+    margin:0 !important;
   }
 
-  #banner-img{
-    width: 100%;
-    height: auto;
-    display: block;
-    opacity: .95;
-  }
+  #banner-img{ width:100%; height:auto; display:block; opacity:.95; }
 
   .music-card{
-    position: relative;
+    position:relative;
     z-index: 3;
-    padding-top: calc(18px + var(--lay-reserve));
   }
 }
 
-.profile-card{ height: auto; min-height: 295px; }
-#about-me-card{ height: auto; min-height: 320px; max-height: 420px; }
+@media (min-width: 1100px){
+  .main-grid > div:nth-child(1){ grid-column: 1 / span 5; }
+  .main-grid > div:nth-child(2){ grid-column: 6 / -1; }
 
-@media (min-width: 981px) and (max-width: 1180px){
+  .bottom-grid > div:nth-child(1){ grid-column: 1 / span 5; }
+  .bottom-grid > div:nth-child(2){ grid-column: 6 / -1; }
+
+  .projects-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1280px){
   :root{
-    --lay-top: -82px;
-    --lay-right: 10px;
-    --lay-reserve: 40px;
+    --lay-w: 420px;
+    --lay-x: 36px;
+    --lay-y: 130px;
   }
 }
+
+@media (max-width: 980px){
+  .lay-container{ display:none; }
+  .projects-grid{ grid-template-columns: 1fr; }
+}
+
+.profile-card{ height:auto; min-height:295px; }
+#about-me-card{ height:auto; min-height:320px; max-height:420px; }
+
+.music-card *{ min-width:0; }
+.music-top{ min-width:0; }
+.music-meta, .music-title, .music-artist{ min-width:0; }
