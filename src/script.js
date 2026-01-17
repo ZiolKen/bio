@@ -1,135 +1,15 @@
 (() => {
   const $ = (s, r = document) => r.querySelector(s);
 
-  const musicRoot =
-    document.querySelector('.row-span-2.md\\:col-span-1.lg\\:col-span-1.lg\\:row-span-2') ||
-    document.querySelector('.row-span-2.md\\:col-span-1') ||
-    document.querySelector('.row-span-2');
-
-  const projectsGrid = $('#projects-grid');
-
-  if (musicRoot && !musicRoot.id) musicRoot.id = 'music-card';
-  if (projectsGrid && !projectsGrid.id) projectsGrid.id = 'projects-grid';
-
-  const MusicPlayer = (() => {
-    if (!musicRoot) return null;
-
-    const titleEl = $('h3', musicRoot);
-    const artistEl = $('p', musicRoot);
-    const progressWrap = musicRoot.querySelector('.w-full.h-0\\.5') || musicRoot.querySelector('.w-full');
-    const progressBar = progressWrap ? progressWrap.querySelector('div') : null;
-
-    const btns = Array.from(musicRoot.querySelectorAll('button'));
-    const btnPlay = btns[1] || null;
-
-    const imgEl = $('img', musicRoot);
-
-    const track = { title: 'Bloody Moon', artist: 'Unknown', src: 'https://raw.githubusercontent.com/ZiolKen/bio/main/assets/bloody_moon.mp3', cover: './res/music.png' };
-
-    const audio = new Audio(track.src);
-    audio.preload = 'auto';
-
-    let raf = 0;
-
-    const setProgress = (pct) => {
-      if (!progressBar) return;
-      const p = Math.max(0, Math.min(100, pct));
-      progressBar.style.width = `${p}%`;
-    };
-
-    const setPlayIcon = (playing) => {
-      if (!btnPlay) return;
-      const svg = btnPlay.querySelector('svg');
-      if (!svg) return;
-      svg.setAttribute('viewBox', '0 0 448 512');
-      svg.innerHTML = playing
-        ? '<path d="M144 479H48c-26.5 0-48-21.5-48-48V80c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v351c0 26.5-21.5 48-48 48zm304-48V80c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v351c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"></path>'
-        : '<path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>';
-    };
-
-    const tick = () => {
-      cancelAnimationFrame(raf);
-      const d = audio.duration || 0;
-      const c = audio.currentTime || 0;
-      setProgress(d ? (c / d) * 100 : 0);
-      if (!audio.paused) raf = requestAnimationFrame(tick);
-    };
-
-    const render = () => {
-      if (titleEl) titleEl.textContent = track.title;
-      if (artistEl) artistEl.textContent = track.artist;
-      if (imgEl && track.cover) imgEl.src = track.cover;
-      setProgress(0);
-      setPlayIcon(false);
-    };
-
-    const play = async () => {
-      try {
-        await audio.play();
-      } catch (_) {
-        setPlayIcon(false);
-      }
-    };
-
-    const pause = () => audio.pause();
-
-    const toggle = () => {
-      if (audio.paused) play();
-      else pause();
-    };
-
-    const seekFromEvent = (e) => {
-      if (!progressWrap) return;
-      const rect = progressWrap.getBoundingClientRect();
-      const clientX = e.touches?.[0]?.clientX ?? e.clientX;
-      const x = clientX - rect.left;
-      const ratio = Math.max(0, Math.min(1, x / rect.width));
-      if (audio.duration) audio.currentTime = ratio * audio.duration;
-      tick();
-    };
-
-    if (btnPlay) btnPlay.addEventListener('click', toggle);
-
-    if (progressWrap) {
-      progressWrap.style.cursor = 'pointer';
-      progressWrap.addEventListener('click', seekFromEvent, { passive: true });
-      progressWrap.addEventListener('touchstart', seekFromEvent, { passive: true });
-    }
-
-    audio.addEventListener('play', () => {
-      setPlayIcon(true);
-      tick();
-    });
-
-    audio.addEventListener('pause', () => {
-      setPlayIcon(false);
-      cancelAnimationFrame(raf);
-    });
-
-    audio.addEventListener('ended', () => {
-      audio.currentTime = 0;
-      setPlayIcon(false);
-      setProgress(0);
-    });
-
-    render();
-    return { play, pause };
-  })();
-
   const FeaturedProjects = (() => {
     if (!projectsGrid) return null;
-
-    projectsGrid.style.display = 'flex';
-    projectsGrid.style.gap = '12px';
-    projectsGrid.style.overflowX = 'auto';
-    projectsGrid.style.overflowY = 'hidden';
-    projectsGrid.style.paddingBottom = '6px';
-    projectsGrid.style.webkitOverflowScrolling = 'touch';
 
     const owner = 'ZiolKen';
     const apiUrl = `https://api.github.com/users/${owner}/repos?per_page=100&sort=updated`;
     const cacheKey = `gh_deployed_${owner}_v1`;
     const cacheTtlMs = 10 * 60 * 1000;
+    let destroyMarquee = null;
+    let clickBound = false;
 
     const escapeHtml = (s) =>
       String(s ?? '')
@@ -176,6 +56,88 @@
       if (r.has_pages) return `https://${owner.toLowerCase()}.github.io/${r.name}/`;
       return '';
     };
+    
+    const enableMarquee = (container, { speed = 32 } = {}) => {
+      if (!container) return () => {};
+    
+      container.classList.add('projects-marquee');
+    
+      const reduce =
+        window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+      if (reduce) {
+        container.style.overflowX = 'auto';
+        container.style.webkitOverflowScrolling = 'touch';
+        return () => {};
+      }
+    
+      const cards = [...container.querySelectorAll('.project-card')];
+      if (cards.length <= 1) return () => {};
+    
+      const html = cards.map((c) => c.outerHTML).join('');
+      const track = document.createElement('div');
+      track.className = 'projects-track';
+      track.innerHTML = html + html;
+    
+      container.innerHTML = '';
+      container.appendChild(track);
+    
+      let raf = 0;
+      let paused = false;
+      let x = 0;
+      let last = performance.now();
+      let half = 1;
+    
+      const measure = () => {
+        const total = track.scrollWidth;
+        half = Math.max(1, total / 2);
+        x = x % half;
+        track.style.transform = `translate3d(${-x}px,0,0)`;
+      };
+    
+      const tick = (now) => {
+        const dt = (now - last) / 1000;
+        last = now;
+    
+        if (!paused) {
+          x += speed * dt;
+          if (x >= half) x -= half;
+          track.style.transform = `translate3d(${-x}px,0,0)`;
+        }
+        raf = requestAnimationFrame(tick);
+      };
+    
+      const onEnter = () => { paused = true; };
+      const onLeave = () => { paused = false; last = performance.now(); };
+    
+      container.addEventListener('mouseenter', onEnter);
+      container.addEventListener('mouseleave', onLeave);
+      container.addEventListener('focusin', onEnter);
+      container.addEventListener('focusout', onLeave);
+    
+      const onVis = () => {
+        if (document.hidden) paused = true;
+        else { paused = false; last = performance.now(); }
+      };
+      document.addEventListener('visibilitychange', onVis);
+    
+      const ro = new ResizeObserver(measure);
+      ro.observe(track);
+    
+      measure();
+      raf = requestAnimationFrame(tick);
+    
+      return () => {
+        cancelAnimationFrame(raf);
+        ro.disconnect();
+        container.removeEventListener('mouseenter', onEnter);
+        container.removeEventListener('mouseleave', onLeave);
+        container.removeEventListener('focusin', onEnter);
+        container.removeEventListener('focusout', onLeave);
+        document.removeEventListener('visibilitychange', onVis);
+      };
+    };
 
     const cardHtml = (r) => {
       const name = escapeHtml(r.name);
@@ -183,19 +145,34 @@
       const lang = escapeHtml(r.language || '');
       const url = escapeHtml(r.html_url || '#');
       const stars = formatNum(r.stargazers_count);
-      const forks = formatNum(r.forks_count);
       const live = escapeHtml(liveUrlOf(r));
-
+    
       return `
-        <a class="project-card" href="${url}" target="_blank" rel="noreferrer" style="flex:0 0 auto; min-width:280px; max-width:340px;">
+        <a class="project-card" href="${url}" target="_blank" rel="noreferrer">
           <div class="project-card-head">
-            <div class="project-name">${name}</div>
+            <div class="project-left">
+              <div class="project-icon" aria-hidden="true"></div>
+              <div class="project-name">${name}</div>
+            </div>
+    
             <div class="project-metrics">
               <span class="metric" title="Stars">★ ${stars}</span>
-              <span class="metric" title="Forks">⑂ ${forks}</span>
+              <span class="metric github" title="GitHub" aria-label="GitHub">
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+                  0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52
+                  -.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2
+                  -3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82
+                  .64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12
+                  .51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
+                  0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                </svg>
+              </span>
             </div>
           </div>
+    
           <div class="project-desc">${desc}</div>
+    
           <div class="project-foot">
             ${lang ? `<span class="chip">${lang}</span>` : `<span></span>`}
             ${live ? `<span class="chip link" data-live="${live}">Live</span>` : ``}
@@ -243,7 +220,26 @@
           .slice(0, 5);
 
         projectsGrid.innerHTML = list.map(cardHtml).join('');
-
+        
+        if (!clickBound) {
+          clickBound = true;
+          projectsGrid.addEventListener(
+            'click',
+            (e) => {
+              const chip = e.target?.closest?.('.chip.link[data-live]');
+              if (!chip) return;
+              const live = chip.getAttribute('data-live');
+              if (!live) return;
+              e.preventDefault();
+              window.open(live, '_blank', 'noopener,noreferrer');
+            },
+            { passive: false }
+          );
+        }
+        
+        destroyMarquee?.();
+        destroyMarquee = enableMarquee(projectsGrid, { speed: 30 });
+        
         projectsGrid.addEventListener(
           'click',
           (e) => {
