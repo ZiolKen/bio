@@ -1,25 +1,29 @@
 <!doctype html>
 <html lang="en" translate="no" color-scheme="dark">
 <head>
-  <meta charSet="utf-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta content="ie=edge" http-equiv="X-UA-Compatible" />
   <title>@ziolken ~ portfolio</title>
+
   <link rel="icon" type="image/png" href="favicon.ico" />
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
   <meta name="theme-color" content="#000000" />
+
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css" rel="stylesheet" /> -->
+
   <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-cpp.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-java.min.js"></script>
+
   <link rel="manifest" href="assets/manifest.webmanifest" />
-  <!-- <link rel="stylesheet" href="src/custom.css" /> -->
   <link rel="stylesheet" href="style.css" />
+
   <link rel="apple-touch-icon" sizes="180x180" href="favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/logo.jpeg" />
   <link rel="icon" type="image/png" sizes="16x16" href="assets/logo.jpeg" />
+
   <meta name="description" content="Feature-rich, customize and modern link-in-bio pages create by @ジオルケン • @ZiolKen." />
   <meta name="author" content="@ziolken ~ portfolio" />
   <meta property="og:title" content="@ziolken ~ portfolio" />
@@ -41,14 +45,20 @@
   <meta name="mobile-web-app-capable" content="yes" />
 </head>
 
-  <body autocomplete="off" spellcheck="false">
-    <div class="container">
-      <div class="main-grid">
-        <div>
-          <div class="profile-card" id="profile">
-            <img src="https://i.pinimg.com/originals/31/e1/03/31e1037b1b30c313806263929812df66.gif" draggable="false" id="profile-banner" />
+<body autocomplete="off" spellcheck="false">
+  <div id="particles-js" aria-hidden="true"></div>
 
-            <div class="profile-meta-row">
+  <div class="container">
+    <main class="page">
+      <section class="grid grid-top">
+        <div class="col">
+          <article class="card profile-card" id="profile">
+            <div class="card-bg">
+              <img src="https://i.pinimg.com/originals/31/e1/03/31e1037b1b30c313806263929812df66.gif" draggable="false" id="profile-banner" />
+              <div class="card-bg-fade"></div>
+            </div>
+
+            <div class="profile-meta">
               <div class="meta-badge" id="local-time">
                 <svg viewBox="0 0 24 24" fill="none" height="24" width="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="clock-icon">
                   <path d="M12 6v6l4 2" />
@@ -57,122 +67,149 @@
                 <span id="time-text"></span>
                 <img src="res/666.gif" draggable="false" id="profile-gif" />
               </div>
+              <div id="time-diff-display"></div>
             </div>
 
-            <div id="time-diff-display"></div>
+            <div class="profile-head">
+              <div class="avatar-wrapper">
+                <img
+                  src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M21%2019V5C21%203.89543%2020.1046%203%2019%203H5C3.89543%203%203%203.89543%203%205V19C3%2020.1046%203.89543%2021%205%2021H19C20.1046%2021%2021%2020.1046%2021%2019Z%22%20stroke%3D%22%238b949e%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3Cpath%20d%3D%22M8.5%2010C9.32843%2010%2010%209.32843%2010%208.5C10%207.67157%209.32843%207%208.5%207C7.67157%207%207%207.67157%207%208.5C7%209.32843%207.67157%2010%208.5%2010Z%22%20fill%3D%22%238b949e%22/%3E%3Cpath%20d%3D%22M21%2015L16%2010L5%2021%22%20stroke%3D%22%238b949e%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E"
+                  draggable="false"
+                  class="avatar"
+                  id="avatar"
+                />
+                <img src="" draggable="false" class="avatar-decoration" id="avatar-decoration" />
+                <img src="" draggable="false" class="status-indicator" id="status-icon" />
+              </div>
 
-            <div class="avatar-wrapper">
-              <img
-                src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M21%2019V5C21%203.89543%2020.1046%203%2019%203H5C3.89543%203%203%203.89543%203%205V19C3%2020.1046%203.89543%2021%205%2021H19C20.1046%2021%2021%2020.1046%2021%2019Z%22%20stroke%3D%22%238b949e%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3Cpath%20d%3D%22M8.5%2010C9.32843%2010%2010%209.32843%2010%208.5C10%207.67157%209.32843%207%208.5%207C7.67157%207%207%207.67157%207%208.5C7%209.32843%207.67157%2010%208.5%2010Z%22%20fill%3D%22%238b949e%22/%3E%3Cpath%20d%3D%22M21%2015L16%2010L5%2021%22%20stroke%3D%22%238b949e%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E"
-                draggable="false"
-                class="avatar"
-                id="avatar"
-              />
-              <img src="" draggable="false" class="avatar-decoration" id="avatar-decoration" />
-              <img src="" draggable="false" class="status-indicator" id="status-icon" />
-            </div>
-
-            <div class="username-container">
-              <div class="display-name" id="display-name"><span class="display-name-inner"></span></div>
-            </div>
-
-            <div class="username-line">
-              <div class="username-flex">
-                <span class="at-username" id="at-username"></span>
-                <div id="guild-badge" style="display: none">
-                  <img src="" id="guild-badge-icon" />
-                  <span id="guild-badge-tag"></span>
+              <div class="profile-title">
+                <div class="username-container">
+                  <div class="display-name" id="display-name"><span class="display-name-inner"></span></div>
                 </div>
-                <div class="devices" id="devices"></div>
+
+                <div class="username-line">
+                  <div class="username-flex">
+                    <span class="at-username" id="at-username"></span>
+                    <div id="guild-badge" style="display:none">
+                      <img src="" id="guild-badge-icon" />
+                      <span id="guild-badge-tag"></span>
+                    </div>
+                    <div class="devices" id="devices"></div>
+                  </div>
+                </div>
+
+                <div class="custom-status" id="custom-status"></div>
               </div>
             </div>
 
-            <div class="custom-status" id="custom-status"></div>
-          </div>
+            <div class="profile-foot-glow"></div>
+          </article>
         </div>
 
-        <div class="music-wrap">
-          <div class="lay-container">
+        <div class="col">
+          <div class="float-figure" aria-hidden="true">
             <img src="res/lay.png" draggable="false" id="banner-img" />
           </div>
 
-          <div class="section-card music-card" id="music-card">
-            <div class="section-title-container">
-              <div class="card-title">Music</div>
-              <div class="mini-actions">
-                <button class="mini-btn" id="music-prev" type="button">Prev</button>
-                <button class="mini-btn" id="music-toggle" type="button">Play</button>
-                <button class="mini-btn" id="music-next" type="button">Next</button>
+          <div class="stack">
+            <article class="card spotify-card" id="spotify-card">
+              <div class="card-head">
+                <div class="card-title">Listening to Spotify</div>
               </div>
-            </div>
-          
-            <div class="music-top">
-              <div class="music-cover">
-                <img src="res/music.png" alt="Cover" id="music-cover-img" draggable="false">
-                <div class="music-cover-overlay"></div>
-                <div class="music-badge" id="music-badge">00:00</div>
-              </div>
-          
-              <div class="music-meta">
-                <div class="music-title" id="music-title">Bloody Moon</div>
-                <div class="music-artist" id="music-artist">Unknown</div>
-          
-                <div class="music-bar">
-                  <div class="music-bar-fill" id="music-bar-fill" style="width:0%"></div>
+              <div class="spotify-body">
+                <div class="spotify-icon">
+                  <svg viewBox="0 0 24 24" fill="none" width="24" height="24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9" />
+                    <path d="M3 15l5-5 4 4 8-8" />
+                  </svg>
                 </div>
-          
-                <div class="music-time">
-                  <span id="music-cur">0:00</span>
-                  <span id="music-dur">0:00</span>
-                </div>
-          
-                <div class="music-controls">
-                  <button class="music-ctrl" id="music-shuffle" type="button" title="Shuffle">⟲</button>
-                  <button class="music-ctrl" id="music-back" type="button" title="Back 10s">↶</button>
-                  <button class="music-ctrl music-ctrl-main" id="music-play" type="button" title="Play/Pause">▶</button>
-                  <button class="music-ctrl" id="music-forward" type="button" title="Forward 10s">↷</button>
-                  <button class="music-ctrl" id="music-loop" type="button" title="Loop">∞</button>
+                <div class="spotify-text">
+                  <div class="spotify-main">Not Listening</div>
+                  <div class="spotify-sub">No song currently playing.</div>
                 </div>
               </div>
-            </div>
-          
-            <div class="music-list" id="music-list"></div>
-          
-            <audio id="audio" preload="metadata"></audio>
+            </article>
+
+            <article class="card music-card section-card" id="music-card">
+              <div class="section-title-container card-head">
+                <div class="card-title">Music</div>
+                <div class="mini-actions">
+                  <button class="mini-btn" id="music-prev" type="button">Prev</button>
+                  <button class="mini-btn" id="music-toggle" type="button">Play</button>
+                  <button class="mini-btn" id="music-next" type="button">Next</button>
+                </div>
+              </div>
+
+              <div class="music-top">
+                <div class="music-cover">
+                  <img src="res/music.png" alt="Cover" id="music-cover-img" draggable="false">
+                  <div class="music-cover-overlay"></div>
+                  <div class="music-badge" id="music-badge">00:00</div>
+                </div>
+
+                <div class="music-meta">
+                  <div class="music-title" id="music-title">Bloody Moon</div>
+                  <div class="music-artist" id="music-artist">Unknown</div>
+
+                  <div class="music-bar">
+                    <div class="music-bar-fill" id="music-bar-fill" style="width:0%"></div>
+                  </div>
+
+                  <div class="music-time">
+                    <span id="music-cur">0:00</span>
+                    <span id="music-dur">0:00</span>
+                  </div>
+
+                  <div class="music-controls">
+                    <button class="music-ctrl" id="music-shuffle" type="button" title="Shuffle">⟲</button>
+                    <button class="music-ctrl" id="music-back" type="button" title="Back 10s">↶</button>
+                    <button class="music-ctrl music-ctrl-main" id="music-play" type="button" title="Play/Pause">▶</button>
+                    <button class="music-ctrl" id="music-forward" type="button" title="Forward 10s">↷</button>
+                    <button class="music-ctrl" id="music-loop" type="button" title="Loop">∞</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="music-list" id="music-list"></div>
+              <audio id="audio" preload="metadata"></audio>
+            </article>
           </div>
         </div>
+      </section>
 
-      <div class="bottom-grid">
-        <div class="section-card" id="about-me-card">
-          <div class="section-title-container">
-            <div class="card-title">About Me</div>
-          </div>
-
-          <div class="about-me-content">
-            <div class="about-section">
-              <h4>Who am I?</h4>
-              <p>i'm ZiolKen - just a random guy on internet from 🌏 <span id="cypher-text"></span></p>
+      <section class="grid grid-bottom">
+        <div class="col">
+          <article class="card section-card about-card" id="about-me-card">
+            <div class="section-title-container card-head">
+              <div class="card-title">About Me</div>
             </div>
 
-            <div class="about-section">
-              <h4>My Interests</h4>
-              <p>
-                i <span class="love-text">love</span> gaming<span class="tooltip-trigger" style="vertical-align: top">*</span>. i also enjoy avn, coding, car, and wasting time on the internet.
-              </p>
-              <div id="global-tooltip-container"></div>
+            <div class="about-me-content">
+              <div class="about-section">
+                <h4>Who am I?</h4>
+                <p>i'm ZiolKen - just a random guy on internet from 🌏 <span id="cypher-text"></span></p>
+              </div>
+
+              <div class="about-section">
+                <h4>My Interests</h4>
+                <p>
+                  i <span class="love-text">love</span> gaming<span class="tooltip-trigger" style="vertical-align: top">*</span>. i also enjoy avn, coding, car, and wasting time on the internet.
+                </p>
+                <div id="global-tooltip-container"></div>
+              </div>
+
+              <div class="about-section">
+                <div class="stamp-grid" id="stamp-grid"></div>
+              </div>
             </div>
 
-            <div class="about-section">
-              <div class="stamp-grid" id="stamp-grid"></div>
-            </div>
-          </div>
-
-          <img src="res/sit.png" draggable="false" class="about-me-image" />
+            <img src="res/sit.png" draggable="false" class="about-me-image" />
+          </article>
         </div>
 
-        <div class="stack-col">
-
-            <div class="terminal">
+        <div class="col">
+          <div class="stack">
+            <section class="terminal" role="region" aria-label="Terminal">
               <div class="terminal-header">
                 <span class="term-dot red"></span>
                 <span class="term-dot yellow"></span>
@@ -186,62 +223,64 @@
                 <span class="terminal-prompt" id="terminal-prompt">root@ziolken $</span>
                 <input class="terminal-input" id="terminal-in" autocomplete="off" spellcheck="false" />
               </div>
-            </div>
+            </section>
 
-          <div class="section-card" id="projects-card">
-            <div class="section-title-container">
-              <div class="card-title">Featured Projects</div>
-            </div>
-            <div class="projects-grid" id="projects-grid"></div>
-          </div>
+            <article class="card section-card" id="projects-card">
+              <div class="section-title-container card-head">
+                <div class="card-title">Featured Projects</div>
+              </div>
+              <div class="projects-grid" id="projects-grid"></div>
+            </article>
 
-          <div class="section-card" id="contact-card">
-            <div class="section-title-container">
-              <div class="card-title">Contact</div>
-            </div>
+            <article class="card section-card" id="contact-card">
+              <div class="section-title-container card-head">
+                <div class="card-title">Contact</div>
+              </div>
 
-            <div class="contact-list" id="contact-list">
-            <a class="contact-item" href="https://t.me/ZiolKen" target="_blank" rel="noreferrer">
-              <span class="contact-left">
-                <img alt="" src="https://cdn.simpleicons.org/telegram/8b949e" />
-                <span>Telegram</span>
-              </span>
-              <span class="contact-right">@ZiolKen →</span>
-            </a>
+              <div class="contact-list" id="contact-list">
+                <a class="contact-item" href="https://t.me/ZiolKen" target="_blank" rel="noreferrer">
+                  <span class="contact-left">
+                    <img alt="" src="https://cdn.simpleicons.org/telegram/8b949e" />
+                    <span>Telegram</span>
+                  </span>
+                  <span class="contact-right">@ZiolKen →</span>
+                </a>
 
-            <a class="contact-item" href="mailto:zknisme@gmail.com">
-              <span class="contact-left">
-                <img alt="" src="https://cdn.simpleicons.org/gmail/8b949e" />
-                <span>Email</span>
-              </span>
-              <span class="contact-right">zknisme@gmail.com →</span>
-            </a>
+                <a class="contact-item" href="mailto:zknisme@gmail.com">
+                  <span class="contact-left">
+                    <img alt="" src="https://cdn.simpleicons.org/gmail/8b949e" />
+                    <span>Email</span>
+                  </span>
+                  <span class="contact-right">zknisme@gmail.com →</span>
+                </a>
 
-            <a class="contact-item" href="https://discord.com/users/951037699320602674" target="_blank" rel="noreferrer">
-              <span class="contact-left">
-                <img alt="" src="https://cdn.simpleicons.org/discord/8b949e" />
-                <span>Discord</span>
-              </span>
-              <span class="contact-right">@ziolken →</span>
-            </a>
-            </div>
+                <a class="contact-item" href="https://discord.com/users/951037699320602674" target="_blank" rel="noreferrer">
+                  <span class="contact-left">
+                    <img alt="" src="https://cdn.simpleicons.org/discord/8b949e" />
+                    <span>Discord</span>
+                  </span>
+                  <span class="contact-right">@ziolken →</span>
+                </a>
+              </div>
+            </article>
           </div>
         </div>
+      </section>
+    </main>
+  </div>
+
+  <noscript>
+    <div class="no-js-overlay">
+      <div class="no-js-message">
+        <h1>JavaScript is Required</h1>
+        <p>This website needs JavaScript to function correctly.</p>
+        <p>Please enable JavaScript in your browser settings and reload the page.</p>
       </div>
     </div>
+  </noscript>
 
-    <noscript>
-      <div class="no-js-overlay">
-        <div class="no-js-message">
-          <h1>JavaScript is Required</h1>
-          <p>This website needs JavaScript to function correctly.</p>
-          <p>Please enable JavaScript in your browser settings and reload the page.</p>
-        </div>
-      </div>
-    </noscript>
-
-    <script src="app.js"></script>
-    <script src="src/script.js"></script>
-    <script src="src/terminal.js"></script>
-  </body>
+  <script src="app.js"></script>
+  <script src="src/script.js"></script>
+  <script src="src/terminal.js"></script>
+</body>
 </html>
