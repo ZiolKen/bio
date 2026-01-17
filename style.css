@@ -1062,3 +1062,27 @@ textarea {
   .mvb{transition:none}
   .music-btn{transition:none}
 }
+
+.music-card{padding:14px;gap:10px;height:295px;overflow:hidden}
+.music-cover{height:120px;border-radius:14px}
+.music-meta{gap:8px}
+
+.music-title{
+  font-size:28px;
+  line-height:1.1;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis
+}
+.music-artist{font-size:14px}
+
+.music-progress{height:14px;margin-top:2px}
+.music-progress::before{height:2px}
+.music-progress-fill{height:2px}
+
+.music-controls{gap:14px}
+.music-btn{width:40px;height:40px}
+.music-btn-main{width:56px;height:56px}
+
+.music-btn svg{width:20px;height:20px}
+.music-btn-main svg{width:22px;height:22px}
