@@ -765,7 +765,6 @@ textarea {
   .lay-container {
     right: 5%;
   }
-  .zct{height:100vh; display:flex; justify-content:center; align-items:center}
 }
 
 @media (max-width: 900px) {
@@ -780,7 +779,6 @@ textarea {
   .projects-grid {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
-  .zct{height:100vh; display:flex; justify-content:center; align-items:center}
 }
 
 @media (max-width: 768px) {
