@@ -1028,7 +1028,6 @@ textarea {
   caret-color: var(--term-accent);
 }
 
-/* ===== Music card: make it consistent & clean on PC ===== */
 .music-card {
   background: var(--card-bg);
   backdrop-filter: blur(10px);
@@ -1045,18 +1044,15 @@ textarea {
   border-color: rgba(139,148,158,.35);
 }
 
-/* Kill weird spacing from utility stacks if needed */
 .music-card * {
   min-width: 0;
 }
 
-/* Nếu trong music card có khối ảnh bìa dạng aspect-square -> đổi sang 16:9 cho đỡ “to đùng” */
 .music-card .aspect-square {
   aspect-ratio: 16 / 9 !important;
   height: auto !important;
 }
 
-/* Clamp chữ để không làm card phình ngang */
 .music-card h3,
 .music-card p {
   overflow: hidden;
@@ -1064,7 +1060,6 @@ textarea {
   white-space: nowrap;
 }
 
-/* Buttons gọn, đồng đều */
 .music-card button {
   border-radius: 10px;
 }
@@ -1084,12 +1079,10 @@ textarea {
   min-width: 0;
 }
 
-/* ===== RIGHT COLUMN GRID (fix PC messy cards) ===== */
 .main-grid > div:nth-child(2){
   min-width: 0;
 }
 
-/* container grid that makes md:col-span / lg:* work */
 .right-grid{
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
@@ -1098,22 +1091,18 @@ textarea {
   min-width: 0;
 }
 
-/* ensure children can shrink instead of pushing layout */
 .right-grid > *{
   min-width: 0;
 }
 
-/* MUSIC: stop it from looking "too big / tall" */
 .music-card .section-card{
-  padding: 18px;               /* đồng bộ */
+  padding: 18px;
 }
 
-/* cái ảnh đang aspect-square => làm nó gọn lại trên PC */
 .music-card .aspect-square{
   aspect-ratio: 16 / 9 !important;
 }
 
-/* tránh text làm phình */
 .music-card h3,
 .music-card p{
   white-space: nowrap;
@@ -1121,14 +1110,224 @@ textarea {
   text-overflow: ellipsis;
 }
 
-/* nếu cái overlay gradient làm rối mắt, giảm */
+.music-card{
+  padding: 18px;
+  gap: 14px;
+}
+
+.music-top{
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 14px;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.music-cover{
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border-card);
+  background: rgba(48,54,61,.25);
+  aspect-ratio: 1 / 1;
+}
+
+.music-cover img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.01);
+}
+
+.music-cover-overlay{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.55), transparent 60%);
+  pointer-events: none;
+}
+
+.music-badge{
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  font-family: Consolas, monaco, "Andale Mono", "Ubuntu Mono", monospace;
+  font-size: 11px;
+  color: var(--text-main);
+  background: rgba(0,0,0,.35);
+  border: 1px solid rgba(255,255,255,.12);
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+.music-meta{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.music-title{
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.music-artist{
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: -4px;
+}
+
+.music-bar{
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(48,54,61,.35);
+  border: 1px solid rgba(255,255,255,.08);
+  overflow: hidden;
+}
+
+.music-bar-fill{
+  height: 100%;
+  background: rgba(255,255,255,.85);
+  width: 0%;
+}
+
+.music-time{
+  display:flex;
+  justify-content: space-between;
+  font-family: Consolas, monaco, "Andale Mono", "Ubuntu Mono", monospace;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.music-controls{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.music-ctrl{
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(48,54,61,.22);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: transform .1s, background-color .2s, border-color .2s, opacity .2s;
+}
+
+.music-ctrl:hover{
+  border-color: rgba(139,148,158,.35);
+  background: rgba(48,54,61,.32);
+}
+
+.music-ctrl:active{ transform: scale(.98); }
+
+.music-ctrl-main{
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.92);
+  color: #000;
+  border-color: rgba(255,255,255,.25);
+}
+
+.music-ctrl.is-on{
+  border-color: rgba(126,231,135,.45);
+  box-shadow: 0 0 0 2px rgba(126,231,135,.12) inset;
+}
+
+.music-list{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 6px;
+  min-width: 0;
+}
+
+.music-item{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 12px;
+  background: rgba(48, 54, 61, 0.25);
+  border: 1px solid var(--border-card);
+  border-radius: 12px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background-color .2s, border-color .2s, transform .1s;
+}
+
+.music-item:hover{
+  border-color: rgba(139,148,158,.35);
+  background: rgba(48,54,61,.33);
+}
+
+.music-item:active{ transform: scale(.995); }
+
+.music-item.active{
+  border-color: rgba(139,148,158,.55);
+  background: rgba(48,54,61,.42);
+}
+
+.music-item-left{
+  min-width: 0;
+  display:flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.music-item-title{
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.music-item-artist{
+  font-size: 11px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.music-item-right{
+  font-family: Consolas, monaco, "Andale Mono", "Ubuntu Mono", monospace;
+  font-size: 11px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+@media (max-width: 900px){
+  .music-top{ grid-template-columns: 140px minmax(0, 1fr); }
+}
+@media (max-width: 520px){
+  .music-top{ grid-template-columns: 1fr; }
+  .music-cover{ aspect-ratio: 16 / 9; }
+  .music-controls{ justify-content: space-between; }
+}
+
 .music-card .absolute.inset-0{
   opacity: .18 !important;
 }
 
-/* responsive */
 @media (max-width: 900px){
   .right-grid{
-    grid-template-columns: 1fr; /* xếp dọc */
+    grid-template-columns: 1fr;
   }
 }
