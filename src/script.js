@@ -12,8 +12,8 @@
   if (projectsGrid && !projectsGrid.id) projectsGrid.id = 'projects-grid';
   
   window.musicTracks = [
-    { title: "Bloody Moon", artist: "Unknown", src: "assets/bloody_moon.mp3", cover: "res/music.png", dur: "3:12" },
-    { title: "Empire", artist: "Ogryzek", src: "res/music/empire.mp3", cover: "res/empire.png", dur: "2:48" },
+    { title: "Bloody Moon", artist: "Unknown", src: "assets/bloody_moon.mp3", cover: "res/music.png", dur: "2:29" },
+    { title: "Empire", artist: "Ogryzek", src: "res/music/empire.mp3", cover: "res/empire.png", dur: "1:37" },
   ];
 
   const tracks = window.musicTracks || [];
