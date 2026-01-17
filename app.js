@@ -47,7 +47,6 @@ function cleanupSocket() {
 
 function updateStatusDisconnected() {
   const banner = document.getElementById("profile-banner");
-  if (banner) banner.style.display = "none";
 
   const loader = document.getElementById("profile-loader");
   if (loader) {
