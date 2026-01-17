@@ -1,432 +1,574 @@
 (() => {
-  const $ = (s) => document.querySelector(s);
+  const $ = (s, root = document) => root.querySelector(s);
+
+  function tokenize(input) {
+    const s = (input ?? "").trim();
+    if (!s) return [];
+    const tokens = [];
+    let cur = "";
+    let quote = null;
+    for (let i = 0; i < s.length; i++) {
+      const ch = s[i];
+      if (quote) {
+        if (ch === "\\" && i + 1 < s.length) {
+          cur += s[++i];
+          continue;
+        }
+        if (ch === quote) {
+          quote = null;
+          continue;
+        }
+        cur += ch;
+        continue;
+      }
+      if (ch === "'" || ch === '"') {
+        quote = ch;
+        continue;
+      }
+      if (/\s/.test(ch)) {
+        if (cur) tokens.push(cur), (cur = "");
+        continue;
+      }
+      cur += ch;
+    }
+    if (cur) tokens.push(cur);
+    return tokens;
+  }
+
+  function isNearBottom(el, threshold = 24) {
+    return el.scrollHeight - el.scrollTop - el.clientHeight < threshold;
+  }
+
+  function safeText(node, text) {
+    node.textContent = text == null ? "" : String(text);
+  }
+
+  function makeSafeLink(href, label) {
+    try {
+      const u = new URL(href, location.href);
+      const ok = ["http:", "https:", "mailto:"].includes(u.protocol);
+      if (!ok) return null;
+      const a = document.createElement("a");
+      a.href = u.href;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.className = "term-link";
+      a.textContent = label ?? u.href;
+      return a;
+    } catch {
+      return null;
+    }
+  }
+
+  function clamp(n, a, b) {
+    return Math.max(a, Math.min(b, n));
+  }
+
+  function wmoDesc(code) {
+    const c = Number(code);
+    const map = {
+      0: "Clear sky",
+      1: "Mainly clear",
+      2: "Partly cloudy",
+      3: "Overcast",
+      45: "Fog",
+      48: "Depositing rime fog",
+      51: "Light drizzle",
+      53: "Moderate drizzle",
+      55: "Dense drizzle",
+      56: "Light freezing drizzle",
+      57: "Dense freezing drizzle",
+      61: "Slight rain",
+      63: "Moderate rain",
+      65: "Heavy rain",
+      66: "Light freezing rain",
+      67: "Heavy freezing rain",
+      71: "Slight snow fall",
+      73: "Moderate snow fall",
+      75: "Heavy snow fall",
+      77: "Snow grains",
+      80: "Slight rain showers",
+      81: "Moderate rain showers",
+      82: "Violent rain showers",
+      85: "Slight snow showers",
+      86: "Heavy snow showers",
+      95: "Thunderstorm",
+      96: "Thunderstorm with slight hail",
+      99: "Thunderstorm with heavy hail",
+    };
+    return map[c] ?? `Weather code ${c}`;
+  }
+
+  class WebTerminal {
+    constructor(opts) {
+      this.out = opts.out;
+      this.input = opts.input;
+      this.clearBtn = opts.clearBtn ?? null;
+      this.promptEl = opts.promptEl ?? null;
+      this.root = opts.root ?? this.out.closest("#terminal") ?? this.out.parentElement ?? document.body;
+      this.maxLines = opts.maxLines ?? 500;
+      this.persistKey = opts.persistKey ?? "webterm.history";
+      this.getPrompt = opts.getPrompt ?? (() => this.promptEl?.textContent || "user@site:~$");
+      this.onCommand = opts.onCommand ?? (async () => {});
+      this.history = this._loadHistory();
+      this.hIndex = this.history.length;
+      this.completions = opts.completions ?? (() => []);
+      this._tabCycle = { base: "", list: [], idx: 0 };
+      this._bind();
+    }
+
+    _bind() {
+      this.input.addEventListener("keydown", async (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          const v = this.input.value;
+          this.input.value = "";
+          await this.run(v);
+          return;
+        }
+        if (e.key === "ArrowUp") {
+          e.preventDefault();
+          this._historyUp();
+          return;
+        }
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          this._historyDown();
+          return;
+        }
+        if (e.key === "Tab") {
+          e.preventDefault();
+          this._autocomplete();
+          return;
+        }
+        if ((e.ctrlKey || e.metaKey) && (e.key === "l" || e.key === "L")) {
+          e.preventDefault();
+          this.clear();
+          return;
+        }
+      });
+
+      this.out.addEventListener("mousedown", () => this.focus());
+      this.clearBtn?.addEventListener("click", () => this.clear());
+      setTimeout(() => this.focus(), 150);
+    }
+
+    focus() {
+      this.input?.focus();
+    }
+
+    clear() {
+      this.out.innerHTML = "";
+    }
+
+    println(text = "", cls) {
+      const shouldStick = isNearBottom(this.out);
+      const div = document.createElement("div");
+      if (cls) div.className = cls;
+      safeText(div, text);
+      this.out.appendChild(div);
+      this._trimLines();
+      if (shouldStick) this.out.scrollTop = this.out.scrollHeight;
+    }
+
+    printNode(node, cls) {
+      const shouldStick = isNearBottom(this.out);
+      const div = document.createElement("div");
+      if (cls) div.className = cls;
+      div.appendChild(node);
+      this.out.appendChild(div);
+      this._trimLines();
+      if (shouldStick) this.out.scrollTop = this.out.scrollHeight;
+    }
+
+    echoCommand(cmd) {
+      this.println(`${this.getPrompt()} ${cmd}`);
+    }
+
+    _trimLines() {
+      const extra = this.out.childNodes.length - this.maxLines;
+      if (extra > 0) {
+        for (let i = 0; i < extra; i++) this.out.removeChild(this.out.firstChild);
+      }
+    }
+
+    _saveHistory() {
+      try {
+        localStorage.setItem(this.persistKey, JSON.stringify(this.history.slice(-200)));
+      } catch {}
+    }
+
+    _loadHistory() {
+      try {
+        const raw = localStorage.getItem(this.persistKey);
+        if (!raw) return [];
+        const arr = JSON.parse(raw);
+        return Array.isArray(arr) ? arr.filter((x) => typeof x === "string") : [];
+      } catch {
+        return [];
+      }
+    }
+
+    _pushHistory(cmd) {
+      const t = cmd.trim();
+      if (!t) return;
+      if (this.history[this.history.length - 1] !== t) this.history.push(t);
+      this.hIndex = this.history.length;
+      this._saveHistory();
+    }
+
+    _historyUp() {
+      if (!this.history.length) return;
+      this.hIndex = clamp(this.hIndex - 1, 0, this.history.length);
+      this.input.value = this.history[this.hIndex] ?? "";
+      queueMicrotask(() => this.input.setSelectionRange(this.input.value.length, this.input.value.length));
+    }
+
+    _historyDown() {
+      if (!this.history.length) return;
+      this.hIndex = clamp(this.hIndex + 1, 0, this.history.length);
+      this.input.value = this.hIndex === this.history.length ? "" : (this.history[this.hIndex] ?? "");
+      queueMicrotask(() => this.input.setSelectionRange(this.input.value.length, this.input.value.length));
+    }
+
+    _autocomplete() {
+      const v = this.input.value;
+      const trimmedLeft = v.replace(/^\s+/, "");
+      const parts = tokenize(trimmedLeft);
+      const current = parts.length ? parts[0] : "";
+      const all = this.completions();
+
+      if (this._tabCycle.base !== current) {
+        const list = all.filter((c) => c.startsWith(current));
+        this._tabCycle = { base: current, list, idx: 0 };
+      }
+
+      const { list } = this._tabCycle;
+      if (!list.length) return;
+
+      const pick = list[this._tabCycle.idx % list.length];
+      this._tabCycle.idx++;
+
+      const rest = parts.slice(1).join(" ");
+      this.input.value = rest ? `${pick} ${rest}` : pick;
+      queueMicrotask(() => this.input.setSelectionRange(this.input.value.length, this.input.value.length));
+    }
+
+    async run(cmd) {
+      const trimmed = (cmd ?? "").trim();
+      if (!trimmed) return;
+      this.echoCommand(trimmed);
+      this._pushHistory(trimmed);
+      try {
+        await this.onCommand(trimmed);
+      } catch (err) {
+        this.println(`Error: ${err?.message ?? String(err)}`, "term-bad");
+      }
+    }
+  }
+
+  function buildCommands({ state, term }) {
+    const st = state && typeof state === "object" ? state : {};
+    st.projects = Array.isArray(st.projects) ? st.projects : [];
+    st.contacts = Array.isArray(st.contacts) ? st.contacts : [];
+    st.tracks = Array.isArray(st.tracks) ? st.tracks : [];
+
+    const commands = new Map();
+    const register = (name, meta) => commands.set(name, { name, ...meta });
+    const listCommands = () => [...commands.keys()].sort();
+
+    const themeKey = "portfolio.terminal.theme";
+    const weatherKey = "portfolio.terminal.weather.location";
+    const themes = ["default", "matrix", "amber", "ice", "mono"];
+
+    function getTheme() {
+      try {
+        return localStorage.getItem(themeKey) || "default";
+      } catch {
+        return "default";
+      }
+    }
+
+    function setTheme(name) {
+      const t = themes.includes(name) ? name : "default";
+      themes.forEach((x) => term.root.classList.remove(`term-theme-${x}`));
+      term.root.classList.add(`term-theme-${t}`);
+      try {
+        localStorage.setItem(themeKey, t);
+      } catch {}
+      return t;
+    }
+
+    function getDefaultLocation() {
+      try {
+        return localStorage.getItem(weatherKey) || "Asia";
+      } catch {
+        return "Asia";
+      }
+    }
+
+    function setDefaultLocation(loc) {
+      try {
+        localStorage.setItem(weatherKey, loc);
+      } catch {}
+    }
+
+    async function fetchWeatherByName(name) {
+      const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
+        name
+      )}&count=1&language=en&format=json`;
+      const geoRes = await fetch(geoUrl, { cache: "no-store" });
+      if (!geoRes.ok) throw new Error("Geocoding failed");
+      const geo = await geoRes.json();
+      const r = geo?.results?.[0];
+      if (!r?.latitude || !r?.longitude) throw new Error("Location not found");
+      const lat = r.latitude;
+      const lon = r.longitude;
+      const place = [r.name, r.admin1, r.country].filter(Boolean).join(", ");
+
+      const wxUrl = `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(
+        lat
+      )}&longitude=${encodeURIComponent(
+        lon
+      )}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto`;
+      const wxRes = await fetch(wxUrl, { cache: "no-store" });
+      if (!wxRes.ok) throw new Error("Weather fetch failed");
+      const wx = await wxRes.json();
+      const cur = wx?.current;
+      if (!cur) throw new Error("Weather data unavailable");
+      return {
+        place,
+        time: cur.time,
+        temp: cur.temperature_2m,
+        humid: cur.relative_humidity_2m,
+        wind: cur.wind_speed_10m,
+        code: cur.weather_code,
+        unitTemp: wx?.current_units?.temperature_2m || "°C",
+        unitHumid: wx?.current_units?.relative_humidity_2m || "%",
+        unitWind: wx?.current_units?.wind_speed_10m || "km/h",
+      };
+    }
+
+    register("help", {
+      desc: "Show available commands",
+      usage: "help [command]",
+      run: async (args) => {
+        const q = args[0];
+        if (q) {
+          const c = commands.get(q);
+          if (!c) return term.println(`No help for: ${q}`, "term-bad");
+          term.println(`${q} — ${c.desc ?? ""}`, "term-muted");
+          if (c.usage) term.println(`Usage: ${c.usage}`, "term-muted");
+          return;
+        }
+        term.println("Commands:", "term-muted");
+        for (const name of listCommands()) {
+          const c = commands.get(name);
+          term.println(`- ${name}${c?.desc ? `: ${c.desc}` : ""}`, "term-muted");
+        }
+        term.println("Tips: ↑/↓ history, Tab autocomplete, Ctrl+L clear", "term-muted");
+      },
+    });
+
+    register("clear", { desc: "Clear terminal output", usage: "clear", run: async () => term.clear() });
+
+    register("about", {
+      desc: "Show about info",
+      usage: "about",
+      run: async () => {
+        term.println("i'm ZiolKen. a random guy that love gaming, avn, coding & car.", "term-muted");
+        term.println("Try: weather  |  theme", "term-muted");
+      },
+    });
+
+    register("projects", {
+      desc: "List featured projects",
+      usage: "projects",
+      run: async () => {
+        if (!st.projects.length) return term.println("No projects found.", "term-muted");
+        term.println("Featured Projects:", "term-muted");
+        st.projects.forEach((p, i) => {
+          const name = p?.name ?? `Project ${i + 1}`;
+          const badge = p?.badge ?? "";
+          const link = p?.link ?? "";
+          if (link) {
+            const a = makeSafeLink(link, `${i + 1}. ${name}${badge ? ` (${badge})` : ""} - ${link}`);
+            if (a) return term.printNode(a, "term-muted");
+          }
+          term.println(`${i + 1}. ${name}${badge ? ` (${badge})` : ""}${link ? ` - ${link}` : ""}`, "term-muted");
+        });
+      },
+    });
+
+    register("contact", {
+      desc: "Show contact info",
+      usage: "contact",
+      run: async () => {
+        if (!st.contacts.length) return term.println("No contacts found.", "term-muted");
+        term.println("Contact:", "term-muted");
+        st.contacts.forEach((c) => {
+          const label = c?.label ?? "Contact";
+          const value = c?.value ?? "";
+          const maybeMail = typeof value === "string" && value.includes("@") ? `mailto:${value}` : null;
+          if (maybeMail) {
+            const a = makeSafeLink(maybeMail, `${label}: ${value}`);
+            if (a) return term.printNode(a, "term-muted");
+          }
+          term.println(`${label}: ${value}`, "term-muted");
+        });
+      },
+    });
+
+    register("echo", { desc: "Print text", usage: "echo <text>", run: async (args) => term.println(args.join(" ")) });
+
+    register("open", {
+      desc: "Open a link in a new tab",
+      usage: "open <url>",
+      run: async (args) => {
+        const url = args[0];
+        if (!url) return term.println("Usage: open <url>", "term-bad");
+        const a = makeSafeLink(url, url);
+        if (!a) return term.println("Blocked: only http/https/mailto allowed.", "term-bad");
+        window.open(a.href, "_blank", "noopener,noreferrer");
+        term.println(`Opened: ${a.href}`, "term-good");
+      },
+    });
+
+    register("play", {
+      desc: "Play track by index",
+      usage: "play <n>",
+      run: async (args) => {
+        const audio = $("#audio");
+        if (!audio) return term.println("Audio element not found (#audio).", "term-bad");
+        const idx = Number(args[0]) - 1;
+        if (!Number.isFinite(idx) || idx < 0 || idx >= st.tracks.length) return term.println("Invalid track number.", "term-bad");
+        if (typeof window.setActiveTrack === "function") window.setActiveTrack(idx);
+        try {
+          await audio.play();
+          term.println(`Playing #${idx + 1}: ${st.tracks[idx]?.title ?? "Unknown"}`, "term-good");
+        } catch {
+          term.println("Cannot autoplay. Click play in the player.", "term-bad");
+        }
+      },
+    });
+
+    register("pause", {
+      desc: "Pause audio",
+      usage: "pause",
+      run: async () => {
+        const audio = $("#audio");
+        if (!audio) return term.println("Audio element not found (#audio).", "term-bad");
+        audio.pause();
+        term.println("Paused.", "term-good");
+      },
+    });
+
+    register("now", {
+      desc: "Show current time",
+      usage: "now",
+      run: async () => term.println(new Date().toString(), "term-muted"),
+    });
+
+    register("theme", {
+      desc: "Set or list terminal themes",
+      usage: "theme [name] | theme list | theme current",
+      run: async (args) => {
+        const a0 = (args[0] ?? "").toLowerCase();
+        if (!a0 || a0 === "list") {
+          term.println(`Themes: ${themes.join(", ")}`, "term-muted");
+          term.println(`Current: ${getTheme()}`, "term-muted");
+          term.println(`Use: theme matrix`, "term-muted");
+          return;
+        }
+        if (a0 === "current") {
+          term.println(`Current: ${getTheme()}`, "term-muted");
+          return;
+        }
+        if (!themes.includes(a0)) {
+          term.println(`Unknown theme: ${a0}`, "term-bad");
+          term.println(`Available: ${themes.join(", ")}`, "term-muted");
+          return;
+        }
+        const t = setTheme(a0);
+        term.println(`Theme set: ${t}`, "term-good");
+      },
+    });
+
+    register("weather", {
+      desc: "Show current weather",
+      usage: 'weather [location] | weather set "location" | weather default',
+      run: async (args) => {
+        const sub = (args[0] ?? "").toLowerCase();
+        if (sub === "default") {
+          term.println(`Default location: ${getDefaultLocation()}`, "term-muted");
+          return;
+        }
+        if (sub === "set") {
+          const loc = args.slice(1).join(" ").trim();
+          if (!loc) return term.println('Usage: weather set "London"', "term-bad");
+          setDefaultLocation(loc);
+          term.println(`Default location set: ${loc}`, "term-good");
+          return;
+        }
+
+        const loc = args.join(" ").trim() || getDefaultLocation();
+        term.println(`Fetching weather for: ${loc} ...`, "term-muted");
+
+        try {
+          const w = await fetchWeatherByName(loc);
+          const line1 = `${w.place} @ ${w.time}`;
+          const line2 = `${wmoDesc(w.code)} • ${w.temp}${w.unitTemp} • Humidity ${w.humid}${w.unitHumid} • Wind ${w.wind}${w.unitWind}`;
+          term.println(line1, "term-muted");
+          term.println(line2, "term-good");
+        } catch (e) {
+          term.println("Weather unavailable (network or location).", "term-bad");
+          term.println('Try: weather "Asia"  |  weather set "New York"', "term-muted");
+        }
+      },
+    });
+
+    setTheme(getTheme());
+
+    return { commands, listCommands };
+  }
 
   function initTerminal() {
     const out = $("#terminal-out");
     const input = $("#terminal-in");
-    const terminalRoot = out?.closest(".terminal");
-    if (!out || !input || !terminalRoot) return;
+    const clearBtn = $("#term-clear");
+    if (!out || !input) return;
 
-    const promptBase = $("#terminal-prompt")?.textContent?.trim() || "root@ziolken $";
+    const promptEl = $("#terminal-prompt");
+    const root = $("#terminal") ?? out.closest("[data-terminal]") ?? out.parentElement ?? document.body;
+    const state = window.state ?? {};
 
-    const state = {
-      theme: localStorage.getItem("portfolio_term_theme") || "night",
-      history: loadHistory(),
-      histIdx: -1,
-      commands: new Map(),
-      aliases: new Map([["cls","clear"],["ls","projects"],["?","help"]]),
-      projects: (window.portfolioState?.projects) || (window.state?.projects) || [],
-      tracks: (window.portfolioState?.tracks) || (window.state?.tracks) || [],
-      contacts: (window.portfolioState?.contacts) || (window.state?.contacts) || parseContactsFromDOM(),
+    const term = new WebTerminal({
+      out,
+      input,
+      clearBtn,
+      promptEl,
+      root,
+      maxLines: 500,
+      persistKey: "portfolio.terminal.history",
+      completions: () => (window.__termCommands ? window.__termCommands() : []),
+    });
+
+    const { commands, listCommands } = buildCommands({ state, term });
+    window.__termCommands = () => listCommands();
+
+    term.println("Type 'help' to see commands.", "term-muted");
+
+    term.onCommand = async (raw) => {
+      const tokens = tokenize(raw);
+      const head = tokens[0]?.toLowerCase();
+      const args = tokens.slice(1);
+      const cmd = commands.get(head);
+      if (!cmd) return term.println("Command not found. Type 'help'.", "term-bad");
+      await cmd.run(args);
     };
-
-    function scrollBottom(){ out.scrollTop = out.scrollHeight; }
-
-    function write(line, cls){
-      const div = document.createElement("div");
-      if (cls) div.className = cls;
-      div.textContent = line;
-      out.appendChild(div);
-      scrollBottom();
-    }
-
-    function writeHTML(html, cls){
-      const div = document.createElement("div");
-      if (cls) div.className = cls;
-      div.innerHTML = html;
-      out.appendChild(div);
-      scrollBottom();
-    }
-
-    function hr(){
-      const div = document.createElement("div");
-      div.className = "term-hr";
-      div.innerHTML = "<span></span>";
-      out.appendChild(div);
-      scrollBottom();
-    }
-
-    function printTable(rows){
-      const table = document.createElement("div");
-      table.className = "term-table";
-      rows.forEach((r, idx) => {
-        const row = document.createElement("div");
-        row.className = "term-row" + (idx === 0 ? " term-head" : "");
-        r.forEach((c) => {
-          const cell = document.createElement("div");
-          cell.className = "term-cell";
-          cell.textContent = c;
-          row.appendChild(cell);
-        });
-        table.appendChild(row);
-      });
-      out.appendChild(table);
-      scrollBottom();
-    }
-
-    const HISTORY_KEY = "portfolio_term_history_v2";
-    const MAX_HISTORY = 80;
-
-    function loadHistory(){
-      try{
-        const raw = localStorage.getItem(HISTORY_KEY);
-        const arr = raw ? JSON.parse(raw) : [];
-        return Array.isArray(arr) ? arr : [];
-      }catch{ return []; }
-    }
-    function saveHistory(){
-      try{ localStorage.setItem(HISTORY_KEY, JSON.stringify(state.history.slice(-MAX_HISTORY))); }catch{}
-    }
-    function pushHistory(cmd){
-      const c = cmd.trim();
-      if (!c) return;
-      if (state.history[state.history.length - 1] !== c) state.history.push(c);
-      state.history = state.history.slice(-MAX_HISTORY);
-      saveHistory();
-      state.histIdx = -1;
-    }
-    function histUp(){
-      if (!state.history.length) return;
-      if (state.histIdx === -1) state.histIdx = state.history.length - 1;
-      else state.histIdx = Math.max(0, state.histIdx - 1);
-      input.value = state.history[state.histIdx] || "";
-      moveCaretEnd();
-    }
-    function histDown(){
-      if (!state.history.length) return;
-      if (state.histIdx === -1) return;
-      state.histIdx = Math.min(state.history.length, state.histIdx + 1);
-      input.value = state.history[state.histIdx] || "";
-      moveCaretEnd();
-      if (state.histIdx >= state.history.length) state.histIdx = -1;
-    }
-    function moveCaretEnd(){
-      requestAnimationFrame(() => {
-        input.selectionStart = input.selectionEnd = input.value.length;
-      });
-    }
-
-    function tokenize(str){
-      const out = [];
-      let cur = "", inQ = false, q = "";
-      for (let i=0;i<str.length;i++){
-        const ch = str[i];
-        if (!inQ && (ch === '"' || ch === "'")) { inQ = true; q = ch; continue; }
-        if (inQ && ch === q) { inQ = false; q = ""; continue; }
-        if (!inQ && /\s/.test(ch)) { if (cur) out.push(cur), cur=""; continue; }
-        cur += ch;
-      }
-      if (cur) out.push(cur);
-      return out;
-    }
-
-    function resolveAlias(head, args){
-      const a = state.aliases.get(head);
-      if (!a) return { head, args };
-      const parts = tokenize(a);
-      return { head: parts[0], args: [...parts.slice(1), ...args] };
-    }
-
-    function applyTheme(t){
-      state.theme = t;
-      localStorage.setItem("portfolio_term_theme", t);
-      terminalRoot.setAttribute("data-theme", t);
-    }
-    applyTheme(state.theme);
-
-    function register(cmd){
-      state.commands.set(cmd.name, cmd);
-      (cmd.aliases || []).forEach((a) => state.aliases.set(a, cmd.name));
-    }
-
-    function cmdList(){
-      const rows = [["CMD","USAGE","DESC","HINT"]];
-      [...state.commands.values()]
-        .sort((a,b) => a.name.localeCompare(b.name))
-        .forEach((c) => rows.push([c.name, c.usage || c.name, c.desc || "", c.hint || ""]));
-      printTable(rows);
-    }
-
-    register({
-      name:"help",
-      usage:"help [cmd]",
-      desc:"Show commands / help.",
-      hint:"try: help projects",
-      run: ({args}) => {
-        const q = args[0];
-        if (!q) return cmdList();
-        const c = state.commands.get(q);
-        if (!c) return write(`No help for: ${q}`, "term-bad");
-        hr();
-        write(`${c.name} — ${c.desc || ""}`, "term-muted");
-        write(`Usage: ${c.usage || c.name}`, "term-muted");
-        if (c.examples?.length){
-          write("Examples:", "term-muted");
-          c.examples.forEach((x) => write(`  ${x}`, "term-muted"));
-        }
-      }
-    });
-
-    register({
-      name:"clear",
-      usage:"clear",
-      desc:"Clear screen.",
-      run: () => (out.innerHTML = "")
-    });
-
-    register({
-      name:"banner",
-      usage:"banner",
-      desc:"Show banner.",
-      run: () => {
-        writeHTML(
-          `<pre class="term-banner">  ____  _       _ _              \n |  _ \\(_) ___ | | | _____ _ __  \n | |_) | |/ _ \\| | |/ / _ \\ '__| \n |  __/| | (_) | |   <  __/ |    \n |_|   |_|\\___/|_|_|\\_\\___|_|    \n</pre>`
-        );
-        writeHTML(
-          `<span class="term-chip" data-cmd="projects">projects</span>
-           <span class="term-chip" data-cmd="contact">contact</span>
-           <span class="term-chip" data-cmd="theme matrix">theme matrix</span>`,
-          "term-muted"
-        );
-      }
-    });
-
-    register({
-      name:"whoami",
-      usage:"whoami",
-      desc:"Print identity.",
-      run: () => write("@ziolken", "term-good")
-    });
-
-    register({
-      name:"date",
-      usage:"date",
-      desc:"Show current date/time.",
-      run: () => write(new Date().toString(), "term-muted")
-    });
-
-    register({
-      name:"about",
-      usage:"about",
-      desc:"About me (short).",
-      run: () => {
-        write("ZiolKen — random guy on internet 🌏", "term-muted");
-        write("Interests: gaming • coding • car • avn • wasting time", "term-muted");
-      }
-    });
-
-    register({
-      name:"theme",
-      usage:"theme [night|mono|matrix|glass]",
-      desc:"Change terminal theme.",
-      examples:["theme matrix","theme glass"],
-      run: ({args}) => {
-        const t = (args[0] || "").toLowerCase();
-        if (!t){
-          write(`Current theme: ${state.theme}`, "term-muted");
-          write("Available: night, mono, matrix, glass", "term-muted");
-          return;
-        }
-        if (!["night","mono","matrix","glass"].includes(t)){
-          write("Invalid theme.", "term-bad");
-          return;
-        }
-        applyTheme(t);
-        write(`Theme set to: ${t}`, "term-good");
-      }
-    });
-
-    register({
-      name:"projects",
-      usage:"projects",
-      desc:"List projects.",
-      hint:"open 1",
-      run: () => {
-        if (!state.projects.length){
-          write("No projects found. Tip: set window.portfolioState.projects", "term-bad");
-          return;
-        }
-        const rows = [["#","NAME","BADGE","LINK"]];
-        state.projects.forEach((p,i) => rows.push([
-          String(i+1),
-          p.name || "-",
-          p.badge || "-",
-          p.link || "-"
-        ]));
-        printTable(rows);
-        write("Tip: open <n>", "term-muted");
-      }
-    });
-
-    register({
-      name:"open",
-      usage:"open <n>",
-      desc:"Open project by index.",
-      examples:["open 1","open 2"],
-      run: ({args}) => {
-        const idx = Number(args[0]) - 1;
-        const p = state.projects[idx];
-        if (!p?.link) return write("Invalid project number.", "term-bad");
-        window.open(p.link, "_blank", "noopener,noreferrer");
-        write(`Opened: ${p.name}`, "term-good");
-      }
-    });
-
-    register({
-      name:"contact",
-      usage:"contact",
-      desc:"Show contacts (parsed from DOM).",
-      hint:"copy email",
-      run: () => {
-        if (!state.contacts.length){
-          write("No contacts found.", "term-bad");
-          return;
-        }
-        const rows = [["KEY","LABEL","VALUE","URL"]];
-        state.contacts.forEach((c) => rows.push([
-          c.key || "-",
-          c.label || "-",
-          c.value || "-",
-          c.url || "-"
-        ]));
-        printTable(rows);
-        write("Tip: copy <key>", "term-muted");
-      }
-    });
-
-    register({
-      name:"copy",
-      usage:"copy <key>",
-      desc:"Copy contact value.",
-      examples:["copy email","copy telegram"],
-      run: async ({args}) => {
-        const k = (args[0] || "").toLowerCase();
-        if (!k) return write("Usage: copy <key>", "term-bad");
-        const c = state.contacts.find((x) => (x.key || "").toLowerCase() === k);
-        if (!c?.value) return write("Not found. Try: contact", "term-bad");
-        try{
-          await navigator.clipboard.writeText(c.value);
-          write(`Copied: ${c.label}`, "term-good");
-        }catch{
-          write("Clipboard blocked by browser.", "term-bad");
-        }
-      }
-    });
-
-    register({
-      name:"echo",
-      usage:"echo <text>",
-      desc:"Print text.",
-      run: ({args}) => write(args.join(" "), "term-muted")
-    });
-
-    register({
-      name:"play",
-      usage:"play <n>",
-      desc:"Play track number n (if you have #audio).",
-      run: ({args}) => playN(args[0])
-    });
-
-    function playN(n){
-      const audio = $("#audio");
-      if (!audio) return write("Audio element not found.", "term-bad");
-      const idx = Number(n) - 1;
-      if (!Number.isFinite(idx) || idx < 0 || idx >= state.tracks.length){
-        write("Invalid track number.", "term-bad");
-        return;
-      }
-      if (typeof window.setActiveTrack === "function") window.setActiveTrack(idx);
-      audio.play()
-        .then(() => write(`Playing #${idx+1}: ${state.tracks[idx].title}`, "term-good"))
-        .catch(() => write("Cannot autoplay. Click play in the player.", "term-bad"));
-    }
-
-    function autocomplete(){
-      const v = input.value.trim();
-      const parts = tokenize(v);
-      if (!parts.length) return;
-
-      if (parts.length === 1){
-        const head = parts[0];
-        const names = [...new Set([...state.commands.keys(), ...state.aliases.keys()])]
-          .filter((x) => x.startsWith(head))
-          .sort();
-        if (names.length === 1) input.value = names[0] + " ";
-        else if (names.length > 1) write(names.join("  "), "term-muted");
-        return;
-      }
-    }
-
-    async function run(cmd){
-      const trimmed = cmd.trim();
-      if (!trimmed) return;
-
-      pushHistory(trimmed);
-      write(`${promptBase} ${trimmed}`);
-
-      const tokens = tokenize(trimmed);
-      let head = tokens[0];
-      let args = tokens.slice(1);
-
-      ({head, args} = resolveAlias(head, args));
-
-      const c = state.commands.get(head);
-      if (!c){
-        write(`Command not found: ${head}. Type 'help'.`, "term-bad");
-        return;
-      }
-
-      try{
-        await c.run({ args, write, writeHTML, printTable, hr, state });
-      }catch(e){
-        write("Error running command.", "term-bad");
-        write(String(e?.message || e), "term-bad");
-      }
-    }
-
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter"){
-        const v = input.value;
-        input.value = "";
-        run(v);
-        return;
-      }
-      if (e.key === "ArrowUp"){ e.preventDefault(); histUp(); return; }
-      if (e.key === "ArrowDown"){ e.preventDefault(); histDown(); return; }
-      if (e.key === "Tab"){ e.preventDefault(); autocomplete(); return; }
-      if (e.key === "Escape"){ input.value = ""; return; }
-    });
-
-    terminalRoot.addEventListener("mousedown", () => input.focus());
-
-    out.addEventListener("click", (e) => {
-      const el = e.target.closest("[data-cmd]");
-      if (!el) return;
-      const cmd = el.getAttribute("data-cmd");
-      if (cmd) run(cmd);
-    });
-
-    writeHTML(
-      `<span class="term-muted">Type <b>help</b> • <b>banner</b> • <b>projects</b> • <b>contact</b> • <b>theme matrix</b></span>`
-    );
-    setTimeout(() => input.focus(), 120);
-
-    function parseContactsFromDOM(){
-      const list = $("#contact-list");
-      if (!list) return [];
-      const items = [...list.querySelectorAll("a.contact-item")];
-      return items.map((a) => {
-        const label = a.querySelector(".contact-left span")?.textContent?.trim() || "Contact";
-        const value = a.querySelector(".contact-right")?.textContent?.replace("→","")?.trim() || a.getAttribute("href") || "";
-        const href = a.getAttribute("href") || "";
-        const key = label.toLowerCase().replace(/\s+/g,"");
-        const url = href.startsWith("http") || href.startsWith("mailto:") ? href : "";
-        return { key, label, value, url };
-      });
-    }
   }
 
-  function init(){
+  function init() {
     initTerminal();
   }
 
