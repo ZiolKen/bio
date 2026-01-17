@@ -154,7 +154,13 @@
         <a class="project-card" href="${url}" target="_blank" rel="noreferrer">
           <div class="project-card-head">
             <div class="project-left">
-              <div class="project-icon" src="res/default.png" alt="Project Icon" loading="lazy"></div>
+              <img
+                class="project-icon"
+                src="res/default.png"
+                alt="Icon"
+                loading="lazy"
+                onerror="this.onerror=null;this.src='res/default.png';"
+              />
               <div class="project-name">${name}</div>
             </div>
 
