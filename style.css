@@ -880,11 +880,18 @@ textarea {
   .lay-container {
     right: 5%;
   }
+  .layt {
+    margin-top: 160px;
+  }
 }
 
 @media (max-width: 900px) {
   .lay-container {
     right: 1%;
+  }
+  
+  .layt {
+    margin-top: 160px;
   }
 
   .main-grid {
