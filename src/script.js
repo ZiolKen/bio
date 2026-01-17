@@ -1,6 +1,8 @@
 (() => {
   const $ = (s, r = document) => r.querySelector(s);
 
+  const projectsGrid = $('#projects-grid');
+
   const FeaturedProjects = (() => {
     if (!projectsGrid) return null;
 
@@ -8,6 +10,7 @@
     const apiUrl = `https://api.github.com/users/${owner}/repos?per_page=100&sort=updated`;
     const cacheKey = `gh_deployed_${owner}_v1`;
     const cacheTtlMs = 10 * 60 * 1000;
+
     let destroyMarquee = null;
     let clickBound = false;
 
@@ -56,50 +59,50 @@
       if (r.has_pages) return `https://${owner.toLowerCase()}.github.io/${r.name}/`;
       return '';
     };
-    
+
     const enableMarquee = (container, { speed = 32 } = {}) => {
       if (!container) return () => {};
-    
+
       container.classList.add('projects-marquee');
-    
+
       const reduce =
         window.matchMedia &&
         window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    
+
       if (reduce) {
         container.style.overflowX = 'auto';
         container.style.webkitOverflowScrolling = 'touch';
         return () => {};
       }
-    
+
       const cards = [...container.querySelectorAll('.project-card')];
       if (cards.length <= 1) return () => {};
-    
+
       const html = cards.map((c) => c.outerHTML).join('');
       const track = document.createElement('div');
       track.className = 'projects-track';
       track.innerHTML = html + html;
-    
+
       container.innerHTML = '';
       container.appendChild(track);
-    
+
       let raf = 0;
       let paused = false;
       let x = 0;
       let last = performance.now();
       let half = 1;
-    
+
       const measure = () => {
         const total = track.scrollWidth;
         half = Math.max(1, total / 2);
         x = x % half;
         track.style.transform = `translate3d(${-x}px,0,0)`;
       };
-    
+
       const tick = (now) => {
         const dt = (now - last) / 1000;
         last = now;
-    
+
         if (!paused) {
           x += speed * dt;
           if (x >= half) x -= half;
@@ -107,27 +110,27 @@
         }
         raf = requestAnimationFrame(tick);
       };
-    
+
       const onEnter = () => { paused = true; };
       const onLeave = () => { paused = false; last = performance.now(); };
-    
+
       container.addEventListener('mouseenter', onEnter);
       container.addEventListener('mouseleave', onLeave);
       container.addEventListener('focusin', onEnter);
       container.addEventListener('focusout', onLeave);
-    
+
       const onVis = () => {
         if (document.hidden) paused = true;
         else { paused = false; last = performance.now(); }
       };
       document.addEventListener('visibilitychange', onVis);
-    
+
       const ro = new ResizeObserver(measure);
       ro.observe(track);
-    
+
       measure();
       raf = requestAnimationFrame(tick);
-    
+
       return () => {
         cancelAnimationFrame(raf);
         ro.disconnect();
@@ -146,7 +149,7 @@
       const url = escapeHtml(r.html_url || '#');
       const stars = formatNum(r.stargazers_count);
       const live = escapeHtml(liveUrlOf(r));
-    
+
       return `
         <a class="project-card" href="${url}" target="_blank" rel="noreferrer">
           <div class="project-card-head">
@@ -154,7 +157,7 @@
               <div class="project-icon" aria-hidden="true"></div>
               <div class="project-name">${name}</div>
             </div>
-    
+
             <div class="project-metrics">
               <span class="metric" title="Stars">★ ${stars}</span>
               <span class="metric github" title="GitHub" aria-label="GitHub">
@@ -170,9 +173,9 @@
               </span>
             </div>
           </div>
-    
+
           <div class="project-desc">${desc}</div>
-    
+
           <div class="project-foot">
             ${lang ? `<span class="chip">${lang}</span>` : `<span></span>`}
             ${live ? `<span class="chip link" data-live="${live}">Live</span>` : ``}
@@ -183,15 +186,15 @@
 
     const setLoading = () => {
       projectsGrid.innerHTML = `
-        <div class="project-card skeleton" style="flex:0 0 auto; min-width:280px; height:120px;"></div>
-        <div class="project-card skeleton" style="flex:0 0 auto; min-width:280px; height:120px;"></div>
-        <div class="project-card skeleton" style="flex:0 0 auto; min-width:280px; height:120px;"></div>
+        <div class="project-card skeleton" style="width:420px; height:220px;"></div>
+        <div class="project-card skeleton" style="width:420px; height:220px;"></div>
+        <div class="project-card skeleton" style="width:420px; height:220px;"></div>
       `;
     };
 
     const setError = () => {
       projectsGrid.innerHTML = `
-        <div class="project-card error" style="flex:0 0 auto; min-width:280px;">
+        <div class="project-card error" style="width:420px;">
           <div class="project-name">Failed to load projects</div>
           <div class="project-desc">GitHub API rate limit or network error.</div>
         </div>
@@ -220,7 +223,7 @@
           .slice(0, 5);
 
         projectsGrid.innerHTML = list.map(cardHtml).join('');
-        
+
         if (!clickBound) {
           clickBound = true;
           projectsGrid.addEventListener(
@@ -236,22 +239,9 @@
             { passive: false }
           );
         }
-        
+
         destroyMarquee?.();
         destroyMarquee = enableMarquee(projectsGrid, { speed: 30 });
-        
-        projectsGrid.addEventListener(
-          'click',
-          (e) => {
-            const chip = e.target?.closest?.('.chip.link[data-live]');
-            if (!chip) return;
-            const live = chip.getAttribute('data-live');
-            if (!live) return;
-            e.preventDefault();
-            window.open(live, '_blank', 'noopener,noreferrer');
-          },
-          { passive: false }
-        );
       } catch (_) {
         setError();
       }
@@ -261,5 +251,5 @@
     return { render };
   })();
 
-  window.__ziolken = { MusicPlayer, FeaturedProjects };
+  window.__ziolken = { FeaturedProjects };
 })();
