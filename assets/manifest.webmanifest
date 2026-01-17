@@ -1,0 +1,33 @@
+{
+  "lang": "en",
+  "id": "ziolken",
+  "name": "ZiolKen | Portfiolo",
+  "short_name": "ZiolKen",
+  "description": "ziolken.pages.dev",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090909",
+  "theme_color": "#090909",
+  "icons": [
+    {
+      "src": "",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
