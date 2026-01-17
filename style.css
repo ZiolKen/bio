@@ -655,7 +655,8 @@ textarea {
   background: rgba(10, 12, 18, 0.6);
   display: flex;
   flex-direction: column;
-  min-height: 260px;
+  height: clamp(260px, 32vh, 320px);
+  min-height: clamp(260px, 32vh, 320px);
 }
 
 .terminal:hover {border-color:rgba(139,148,158,.35)}
