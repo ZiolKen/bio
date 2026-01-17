@@ -149,6 +149,25 @@
       });
 
       this.out.addEventListener("mousedown", () => this.focus());
+      this.out.addEventListener(
+        "wheel",
+        (e) => {
+          const el = this.out;
+          const canScroll = el.scrollHeight > el.clientHeight + 1;
+          if (!canScroll) return;
+      
+          const atTop = el.scrollTop <= 0;
+          const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+          const up = e.deltaY < 0;
+      
+          if ((up && !atTop) || (!up && !atBottom)) {
+            e.stopPropagation();
+            e.preventDefault();
+            el.scrollTop += e.deltaY;
+          }
+        },
+        { passive: false }
+      );
       this.clearBtn?.addEventListener("click", () => this.clear());
       setTimeout(() => this.focus(), 150);
     }
