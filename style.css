@@ -658,7 +658,7 @@ textarea {
   min-height: 260px;
 }
 
-.termimal:hover {border-color:rgba(139,148,158,.35)}
+.terminal:hover {border-color:rgba(139,148,158,.35)}
 
 .terminal-header {
   display: flex;
@@ -928,8 +928,6 @@ textarea {
   }
 }
 
-/* ===== Terminal upgrades (compatible with your current .terminal styles) ===== */
-
 .terminal {
   --term-bg: rgba(10, 12, 18, 0.6);
   --term-fg: var(--text-main);
@@ -972,7 +970,6 @@ textarea {
   display:block;height:1px;background: rgba(255,255,255,.08);
 }
 
-/* clickable hints / chips */
 .term-chip{
   display:inline-flex;
   align-items:center;
@@ -987,7 +984,6 @@ textarea {
 }
 .term-chip:hover{ border-color: rgba(139,148,158,.35); }
 
-/* Table */
 .term-table{
   display:grid;
   gap: 0;
@@ -1013,21 +1009,18 @@ textarea {
 }
 .term-row.term-head .term-cell{ border-top:none; }
 
-/* responsive: on small screens -> 2 columns */
 @media (max-width: 520px){
   .term-row{ grid-template-columns: 1fr 1.4fr; }
   .term-row .term-cell:nth-child(3),
   .term-row .term-cell:nth-child(4){ display:none; }
 }
 
-/* small banner */
 .term-banner{
   margin: 6px 0;
   line-height: 1.15;
   color: var(--term-muted);
 }
 
-/* subtle caret blink on input (optional) */
 .terminal-input{
   caret-color: var(--term-accent);
   }
