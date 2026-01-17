@@ -499,7 +499,7 @@ textarea {
 .lay-container {
   top: -154px;
   right: 11%;
-  width: 380px;
+  width: auto;
   z-index: 99;
   pointer-events: none;
 }
