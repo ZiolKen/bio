@@ -1,8 +1,8 @@
 {
   "lang": "en",
   "id": "ziolken",
-  "name": "ZiolKen | Portfiolo",
-  "short_name": "ZiolKen",
+  "name": "@ziolken ~ portfolio",
+  "short_name": "@ziolken",
   "description": "ziolken.pages.dev",
   "start_url": "/",
   "display": "standalone",
@@ -10,24 +10,24 @@
   "theme_color": "#090909",
   "icons": [
     {
-      "src": "",
+      "src": "logo.jpeg",
       "sizes": "64x64",
-      "type": "image/png"
+      "type": "image/jpeg"
     },
     {
-      "src": "",
+      "src": "logo.jpeg",
       "sizes": "128x128",
-      "type": "image/png"
+      "type": "image/jpeg"
     },
     {
-      "src": "",
+      "src": "logo.jpeg",
       "sizes": "256x256",
-      "type": "image/png"
+      "type": "image/jpeg"
     },
     {
-      "src": "",
+      "src": "logo.jpeg",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/jpeg"
     }
   ]
 }
