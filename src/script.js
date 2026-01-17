@@ -13,7 +13,7 @@
   
   window.musicTracks = [
     { title: "Bloody Moon", artist: "Unknown", src: "assets/bloody_moon.mp3", cover: "res/music.png", dur: "2:29" },
-    { title: "Empire", artist: "Ogryzek", src: "res/music/empire.mp3", cover: "res/empire.png", dur: "1:37" },
+    { title: "Empire", artist: "Ogryzek", src: "assets/empire.mp3", cover: "res/empire.jpeg", dur: "1:37" },
   ];
 
   const tracks = window.musicTracks || [];
