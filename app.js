@@ -94,14 +94,6 @@ function updateStatus(p) {
   }
 
   const banner = document.getElementById("profile-banner");
-  if (banner) {
-    if (p.kv?.banner && p.discord_user) {
-      banner.style.display = "block";
-      if (!banner.src.endsWith("res/banner.png")) banner.src = "res/banner.png";
-    } else {
-      banner.style.display = "none";
-    }
-  }
 
   const avatar = document.getElementById("avatar");
   const deco = document.getElementById("avatar-decoration");
