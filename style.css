@@ -148,7 +148,8 @@ textarea {
   flex-direction: column;
 }
 
-.section-card:hover {border-color:rgba(139,148,158,.35)}
+.section-card:hover,
+.profile-card:hover {border-color:rgba(139,148,158,.35)}
 
 .section-title-container {
   display: flex;
