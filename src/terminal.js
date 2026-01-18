@@ -498,9 +498,9 @@
 
     function getDefaultLocation() {
       try {
-        return localStorage.getItem(weatherKey) || "Asia/Ho_Chi_Minh";
+        return localStorage.getItem(weatherKey) || "Asia";
       } catch {
-        return "Asia/Ho_Chi_Minh";
+        return "Asia";
       }
     }
 
@@ -688,7 +688,7 @@
       desc: "Show about info",
       usage: "about",
       run: async () => {
-        term.println("ZiolKen — web terminal (Kali-like utilities).", "term-muted");
+        term.println("@ziolken — web terminal.", "term-muted");
         term.println("Try: curl | ping | dig | rdap | sha256 | base64 | jwt | passgen | projects | contact", "term-muted");
       },
     });
@@ -1334,7 +1334,7 @@
 
     setTheme(getTheme());
 
-    term.println("Type 'help' to see commands. Kali-like: curl/ping/dig/rdap/sha256/base64/jwt/passgen.", "term-muted");
+    term.println("Type 'help' to see commands. curl/ping/dig/rdap/sha256/base64/jwt/passgen", "term-muted");
 
     term.onCommand = async (raw, ctx) => {
       const tokens = tokenize(raw);
