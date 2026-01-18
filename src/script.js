@@ -9,7 +9,6 @@
     Math.floor(Math.random() * (max - min + 1)) + min;
 
   let lastIdx = -1;
-
   function pickRandomTitle() {
     let idx;
     do {
@@ -23,25 +22,51 @@
   let cursorOn = true;
   setInterval(() => (cursorOn = !cursorOn), 450);
 
-  function typeTitle(text) {
+  const setTitle = (text) => {
+    document.title = text + (cursorOn ? CURSOR : "");
+  };
+
+  function typeIn(text, done) {
     let i = 0;
-
     const tick = () => {
-      const typed = text.slice(0, i);
-      document.title = typed + (cursorOn ? CURSOR : "");
+      setTitle(text.slice(0, i));
       i++;
-
       if (i <= text.length) {
         setTimeout(tick, randInt(60, 140));
       } else {
-        setTimeout(() => typeTitle(pickRandomTitle()), 1200);
+        done?.();
       }
     };
-
     tick();
   }
 
-  typeTitle(pickRandomTitle());
+  function deleteOut(current, done) {
+    let i = current.length;
+    const tick = () => {
+      setTitle(current.slice(0, i));
+      i--;
+      if (i >= 0) {
+        setTimeout(tick, randInt(40, 90));
+      } else {
+        done?.();
+      }
+    };
+    tick();
+  }
+
+  function loop(currentText = "") {
+    const next = pickRandomTitle();
+
+    const startTyping = () => typeIn(next, () => setTimeout(() => loop(next), 1200));
+
+    if (currentText && currentText.length) {
+      deleteOut(currentText, () => setTimeout(startTyping, 250));
+    } else {
+      startTyping();
+    }
+  }
+
+  loop("");
   
   const $ = (s, r = document) => r.querySelector(s);
 
