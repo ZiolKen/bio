@@ -542,7 +542,7 @@ textarea {
   background: rgba(10, 12, 18, 0.6);
   display: flex;
   flex-direction: column;
-  height: 280px;
+  height: 290px;
 }
 
 .terminal:hover {border-color:rgba(139,148,158,.35)}
