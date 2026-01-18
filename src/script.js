@@ -11,9 +11,8 @@
   let lastIdx = -1;
   function pickRandomTitle() {
     let idx;
-    do {
-      idx = randInt(0, TITLES.length - 1);
-    } while (TITLES.length > 1 && idx === lastIdx);
+    do idx = randInt(0, TITLES.length - 1);
+    while (TITLES.length > 1 && idx === lastIdx);
     lastIdx = idx;
     return TITLES[idx];
   }
@@ -22,8 +21,11 @@
   let cursorOn = true;
   setInterval(() => (cursorOn = !cursorOn), 450);
 
+  const BLANK = "\u00A0";
+
   const setTitle = (text) => {
-    document.title = text + (cursorOn ? CURSOR : "");
+    const safe = text.length ? text : BLANK;
+    document.title = safe + (cursorOn ? CURSOR : "");
   };
 
   function typeIn(text, done) {
@@ -31,11 +33,8 @@
     const tick = () => {
       setTitle(text.slice(0, i));
       i++;
-      if (i <= text.length) {
-        setTimeout(tick, randInt(60, 140));
-      } else {
-        done?.();
-      }
+      if (i <= text.length) setTimeout(tick, randInt(60, 140));
+      else done?.();
     };
     tick();
   }
@@ -45,11 +44,8 @@
     const tick = () => {
       setTitle(current.slice(0, i));
       i--;
-      if (i >= 0) {
-        setTimeout(tick, randInt(40, 90));
-      } else {
-        done?.();
-      }
+      if (i >= 0) setTimeout(tick, randInt(40, 90));
+      else done?.();
     };
     tick();
   }
@@ -57,10 +53,11 @@
   function loop(currentText = "") {
     const next = pickRandomTitle();
 
-    const startTyping = () => typeIn(next, () => setTimeout(() => loop(next), 1200));
+    const startTyping = () =>
+      typeIn(next, () => setTimeout(() => loop(next), 1200));
 
     if (currentText && currentText.length) {
-      deleteOut(currentText, () => setTimeout(startTyping, 250));
+      deleteOut(currentText, () => setTimeout(startTyping, 200));
     } else {
       startTyping();
     }
