@@ -182,7 +182,7 @@ textarea {
   mask-image: linear-gradient(to bottom, black 65%, rgba(0, 0, 0, 0.9) 75%, rgba(0, 0, 0, 0.5) 90%, transparent 100%);
 }
 
-#profile-banner[src="res/banner.png"],
+#profile-banner[src=""],
 #profile-banner:not([src]) {
   display: none;
 }
