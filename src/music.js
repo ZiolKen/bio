@@ -31,6 +31,10 @@
   let data = null;
   let raf = 0;
   let wired = false;
+  
+  elAudio.preload = "metadata";
+  elAudio.playsInline = true;
+  elAudio.setAttribute("playsinline", "");
 
   const fmt = (s) => {
     if (!isFinite(s) || s < 0) return "0:00";
