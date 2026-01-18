@@ -15,6 +15,10 @@
 ### <p align="center">Modern Personal Portfolio / Link-in-Bio — Static, Fast, Deploy Anywhere</p>
 
 <p align="center">
+  <img src="https://files.catbox.moe/chkn0y.png" alt="Banner" width="720">
+</p>
+
+<p align="center">
   <a href="https://ziolken.vercel.app"><img src="https://img.shields.io/badge/Live-Vercel-6366f1?style=for-the-badge"></a>
   <a href="https://ziolken.pages.dev"><img src="https://img.shields.io/badge/Live-Cloudflare-f97316?style=for-the-badge"></a>
   <a href="https://ziolken.github.io"><img src="https://img.shields.io/badge/Live-GitHub%20Pages-18181b?style=for-the-badge"></a>
@@ -25,7 +29,6 @@
   <a href="https://github.com/ZiolKen/ziolken.github.io/stargazers"><img src="https://img.shields.io/github/stars/ZiolKen/ziolken.github.io?style=flat"></a>
   <a href="https://github.com/ZiolKen/ziolken.github.io/blob/main/LICENSE"><img src="https://img.shields.io/github/license/ZiolKen/ziolken.github.io?style=flat"></a>
   <a href="https://github.com/ZiolKen/ziolken.github.io/forks"><img src="https://img.shields.io/github/forks/ZiolKen/ziolken.github.io?style=flat"></a>
-  <a href="https://github.com/ZiolKen/ziolken.github.io/commits/main"><img src="https://img.shields.io/github/last-commit/ZiolKen/ziolken.github.io?style=flat"></a>
 </p>
 
 ---
