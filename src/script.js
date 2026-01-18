@@ -1,12 +1,7 @@
 (() => {
-  const TITLES = [
-    "@ziolken ~ portfolio",
-    "root@ziolken $ about",
-    ">_ print('Hello World')",
-  ];
+  const TITLES = ["@ziolken ~ portfolio", "root@ziolken $ about", ">_ print('Hello World')"];
 
-  const randInt = (min, max) =>
-    Math.floor(Math.random() * (max - min + 1)) + min;
+  const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
   let lastIdx = -1;
   function pickRandomTitle() {
@@ -52,27 +47,20 @@
 
   function loop(currentText = "") {
     const next = pickRandomTitle();
-
-    const startTyping = () =>
-      typeIn(next, () => setTimeout(() => loop(next), 1200));
-
-    if (currentText && currentText.length) {
-      deleteOut(currentText, () => setTimeout(startTyping, 200));
-    } else {
-      startTyping();
-    }
+    const startTyping = () => typeIn(next, () => setTimeout(() => loop(next), 1200));
+    if (currentText && currentText.length) deleteOut(currentText, () => setTimeout(startTyping, 200));
+    else startTyping();
   }
 
   loop("");
-  
-  const $ = (s, r = document) => r.querySelector(s);
 
-  const projectsGrid = $('#projects-grid');
+  const $ = (s, r = document) => r.querySelector(s);
+  const projectsGrid = $("#projects-grid");
 
   const FeaturedProjects = (() => {
     if (!projectsGrid) return null;
 
-    const owner = 'ZiolKen';
+    const owner = "ZiolKen";
     const apiUrl = `https://api.github.com/users/${owner}/repos?per_page=100&sort=updated`;
     const cacheKey = `gh_deployed_${owner}_v1`;
     const cacheTtlMs = 10 * 60 * 1000;
@@ -81,12 +69,12 @@
     let clickBound = false;
 
     const escapeHtml = (s) =>
-      String(s ?? '')
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#39;');
+      String(s ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
 
     const formatNum = (n) => {
       const x = Number(n) || 0;
@@ -103,7 +91,7 @@
         if (!parsed?.ts || !Array.isArray(parsed?.data)) return null;
         if (Date.now() - parsed.ts > cacheTtlMs) return null;
         return parsed.data;
-      } catch (_) {
+      } catch {
         return null;
       }
     };
@@ -111,45 +99,41 @@
     const writeCache = (data) => {
       try {
         localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data }));
-      } catch (_) {}
+      } catch {}
     };
 
     const isDeployed = (r) => {
-      const home = (r.homepage || '').trim();
+      const home = (r.homepage || "").trim();
       return Boolean(home) || Boolean(r.has_pages);
     };
 
     const liveUrlOf = (r) => {
-      const home = (r.homepage || '').trim();
+      const home = (r.homepage || "").trim();
       if (home) return home;
       if (r.has_pages) return `https://${owner.toLowerCase()}.github.io/${r.name}/`;
-      return '';
+      return "";
     };
 
     const enableMarquee = (container, { speed = 32 } = {}) => {
       if (!container) return () => {};
+      container.classList.add("projects-marquee");
 
-      container.classList.add('projects-marquee');
-
-      const reduce =
-        window.matchMedia &&
-        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
+      const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (reduce) {
-        container.style.overflowX = 'auto';
-        container.style.webkitOverflowScrolling = 'touch';
+        container.style.overflowX = "auto";
+        container.style.webkitOverflowScrolling = "touch";
         return () => {};
       }
 
-      const cards = [...container.querySelectorAll('.project-card')];
+      const cards = [...container.querySelectorAll(".project-card")];
       if (cards.length <= 1) return () => {};
 
-      const html = cards.map((c) => c.outerHTML).join('');
-      const track = document.createElement('div');
-      track.className = 'projects-track';
+      const html = cards.map((c) => c.outerHTML).join("");
+      const track = document.createElement("div");
+      track.className = "projects-track";
       track.innerHTML = html + html;
 
-      container.innerHTML = '';
+      container.innerHTML = "";
       container.appendChild(track);
 
       let raf = 0;
@@ -168,7 +152,6 @@
       const tick = (now) => {
         const dt = (now - last) / 1000;
         last = now;
-
         if (!paused) {
           x += speed * dt;
           if (x >= half) x -= half;
@@ -177,19 +160,25 @@
         raf = requestAnimationFrame(tick);
       };
 
-      const onEnter = () => { paused = true; };
-      const onLeave = () => { paused = false; last = performance.now(); };
+      const onEnter = () => (paused = true);
+      const onLeave = () => {
+        paused = false;
+        last = performance.now();
+      };
 
-      container.addEventListener('mouseenter', onEnter);
-      container.addEventListener('mouseleave', onLeave);
-      container.addEventListener('focusin', onEnter);
-      container.addEventListener('focusout', onLeave);
+      container.addEventListener("mouseenter", onEnter);
+      container.addEventListener("mouseleave", onLeave);
+      container.addEventListener("focusin", onEnter);
+      container.addEventListener("focusout", onLeave);
 
       const onVis = () => {
         if (document.hidden) paused = true;
-        else { paused = false; last = performance.now(); }
+        else {
+          paused = false;
+          last = performance.now();
+        }
       };
-      document.addEventListener('visibilitychange', onVis);
+      document.addEventListener("visibilitychange", onVis);
 
       const ro = new ResizeObserver(measure);
       ro.observe(track);
@@ -200,19 +189,19 @@
       return () => {
         cancelAnimationFrame(raf);
         ro.disconnect();
-        container.removeEventListener('mouseenter', onEnter);
-        container.removeEventListener('mouseleave', onLeave);
-        container.removeEventListener('focusin', onEnter);
-        container.removeEventListener('focusout', onLeave);
-        document.removeEventListener('visibilitychange', onVis);
+        container.removeEventListener("mouseenter", onEnter);
+        container.removeEventListener("mouseleave", onLeave);
+        container.removeEventListener("focusin", onEnter);
+        container.removeEventListener("focusout", onLeave);
+        document.removeEventListener("visibilitychange", onVis);
       };
     };
 
     const cardHtml = (r) => {
       const name = escapeHtml(r.name);
-      const desc = escapeHtml(r.description || 'No description');
-      const lang = escapeHtml(r.language || '');
-      const url = escapeHtml(r.html_url || '#');
+      const desc = escapeHtml(r.description || "No description");
+      const lang = escapeHtml(r.language || "");
+      const url = escapeHtml(r.html_url || "#");
       const stars = formatNum(r.stargazers_count);
       const live = escapeHtml(liveUrlOf(r));
 
@@ -220,16 +209,9 @@
         <a class="project-card" href="${url}" target="_blank" rel="noreferrer">
           <div class="project-card-head">
             <div class="project-left">
-              <img
-                class="project-icon"
-                src="res/default.png"
-                alt="Icon"
-                loading="lazy"
-                onerror="this.onerror=null;this.src='res/default.png';"
-              />
+              <img class="project-icon" src="res/default.png" alt="Icon" loading="lazy" onerror="this.onerror=null;this.src='res/default.png';" />
               <div class="project-name">${name}</div>
             </div>
-
             <div class="project-metrics">
               <span class="metric" title="Stars">★ ${stars}</span>
               <span class="metric github" title="GitHub" aria-label="GitHub">
@@ -273,15 +255,25 @@
       `;
     };
 
-    const fetchRepos = async () => {
-      const cached = readCache();
+    const fetchRepos = async (opts = {}) => {
+      const force = Boolean(opts.force);
+      const signal = opts.signal;
+      const cached = !force ? readCache() : null;
       if (cached) return cached;
 
-      const res = await fetch(apiUrl, { headers: { Accept: 'application/vnd.github+json' } });
-      if (!res.ok) throw new Error('GitHub API error');
+      const res = await fetch(apiUrl, { headers: { Accept: "application/vnd.github+json" }, cache: "no-store", signal });
+      if (!res.ok) throw new Error("GitHub API error");
       const data = await res.json();
       writeCache(data);
       return data;
+    };
+
+    const getDeployedRepos = async (opts = {}) => {
+      const repos = await fetchRepos(opts);
+      return repos
+        .filter((r) => !r.fork && !r.archived)
+        .filter(isDeployed)
+        .sort((a, b) => new Date(b.pushed_at || b.updated_at || 0) - new Date(a.pushed_at || a.updated_at || 0));
     };
 
     const render = async () => {
@@ -294,19 +286,19 @@
           .sort((a, b) => new Date(b.pushed_at || b.updated_at || 0) - new Date(a.pushed_at || a.updated_at || 0))
           .slice(0, 5);
 
-        projectsGrid.innerHTML = list.map(cardHtml).join('');
+        projectsGrid.innerHTML = list.map(cardHtml).join("");
 
         if (!clickBound) {
           clickBound = true;
           projectsGrid.addEventListener(
-            'click',
+            "click",
             (e) => {
-              const chip = e.target?.closest?.('.chip.link[data-live]');
+              const chip = e.target?.closest?.(".chip.link[data-live]");
               if (!chip) return;
-              const live = chip.getAttribute('data-live');
+              const live = chip.getAttribute("data-live");
               if (!live) return;
               e.preventDefault();
-              window.open(live, '_blank', 'noopener,noreferrer');
+              window.open(live, "_blank", "noopener,noreferrer");
             },
             { passive: false }
           );
@@ -314,14 +306,16 @@
 
         destroyMarquee?.();
         destroyMarquee = enableMarquee(projectsGrid, { speed: 30 });
-      } catch (_) {
+      } catch {
         setError();
       }
     };
 
     render();
-    return { render };
+
+    return { owner, fetchRepos, getDeployedRepos, render, liveUrlOf };
   })();
 
-  window.__ziolken = { FeaturedProjects };
+  window.__ziolken = window.__ziolken || {};
+  window.__ziolken.FeaturedProjects = FeaturedProjects;
 })();
