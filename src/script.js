@@ -1,4 +1,48 @@
 (() => {
+  const TITLES = [
+    "@ziolken ~ portfolio",
+    "root@ziolken $ about",
+    ">_ print('Hello World')",
+  ];
+
+  const randInt = (min, max) =>
+    Math.floor(Math.random() * (max - min + 1)) + min;
+
+  let lastIdx = -1;
+
+  function pickRandomTitle() {
+    let idx;
+    do {
+      idx = randInt(0, TITLES.length - 1);
+    } while (TITLES.length > 1 && idx === lastIdx);
+    lastIdx = idx;
+    return TITLES[idx];
+  }
+
+  const CURSOR = "▌";
+  let cursorOn = true;
+  setInterval(() => (cursorOn = !cursorOn), 450);
+
+  function typeTitle(text) {
+    let i = 0;
+
+    const tick = () => {
+      const typed = text.slice(0, i);
+      document.title = typed + (cursorOn ? CURSOR : "");
+      i++;
+
+      if (i <= text.length) {
+        setTimeout(tick, randInt(60, 140));
+      } else {
+        setTimeout(() => typeTitle(pickRandomTitle()), 1200);
+      }
+    };
+
+    tick();
+  }
+
+  typeTitle(pickRandomTitle());
+  
   const $ = (s, r = document) => r.querySelector(s);
 
   const projectsGrid = $('#projects-grid');
