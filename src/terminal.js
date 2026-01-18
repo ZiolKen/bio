@@ -874,7 +874,7 @@
       run: async () => {
         const tg = makeSafeLink("https://t.me/ZiolKen", "Telegram: @ZiolKen");
         const em = makeSafeLink("mailto:zknisme@gmail.com", "Email: zknisme@gmail.com");
-        const dc = makeSafeLink("https://discord.com/app", "Discord: @ziolken");
+        const dc = makeSafeLink("https://discord.com/users/951037699320602674", "Discord: @ziolken");
         term.println("Contact:", "term-muted");
         if (tg) term.printNode(tg, "term-muted"); else term.println("Telegram: @ZiolKen", "term-muted");
         if (em) term.printNode(em, "term-muted"); else term.println("Email: zknisme@gmail.com", "term-muted");
