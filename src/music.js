@@ -16,12 +16,7 @@
   const bars = Array.from(elMute.querySelectorAll(".mvb"));
 
   const tracks = [
-    {
-      title: "Bloody Moon",
-      artist: "Unknown",
-      src: "assets/bloody_moon.mp3",
-      cover: "res/music.png"
-    }
+    { title: "Bloody Moon", artist: "Unknown", src: "assets/bloody_moon.mp3", cover: "res/music.png" },
   ];
 
   let idx = 0;
@@ -31,17 +26,10 @@
   let data = null;
   let raf = 0;
   let wired = false;
-  
+
   elAudio.preload = "metadata";
   elAudio.playsInline = true;
   elAudio.setAttribute("playsinline", "");
-
-  const fmt = (s) => {
-    if (!isFinite(s) || s < 0) return "0:00";
-    const m = Math.floor(s / 60);
-    const r = Math.floor(s % 60);
-    return `${m}:${String(r).padStart(2, "0")}`;
-  };
 
   const load = (i) => {
     idx = (i + tracks.length) % tracks.length;
@@ -123,6 +111,17 @@
 
   const pause = () => elAudio.pause();
 
+  const playIndex = async (i) => {
+    if (Number.isFinite(i)) {
+      const wasPlaying = !elAudio.paused;
+      load(i);
+      if (wasPlaying) await play();
+      else await play();
+      return;
+    }
+    await play();
+  };
+
   const toggle = async () => {
     if (elAudio.paused) await play();
     else pause();
@@ -190,4 +189,16 @@
 
   if (!elTitle.textContent) elTitle.textContent = "Unknown";
   if (!elArtist.textContent) elArtist.textContent = "Unknown";
+
+  window.__ziolkenMusic = {
+    tracks,
+    getIndex: () => idx,
+    setIndex: (i) => load(i),
+    play: async (i) => (Number.isFinite(i) ? playIndex(i) : play()),
+    pause: () => pause(),
+    toggle: () => toggle(),
+    audio: elAudio,
+  };
+
+  window.setActiveTrack = (i) => load(i);
 })();
